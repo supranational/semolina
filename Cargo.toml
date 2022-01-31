@@ -1,0 +1,32 @@
+[package]
+name = "semolina"
+version = "0.1.0"
+edition = "2018"
+include = [
+    "/src/**",
+    "/Cargo.toml",
+]
+links = "semolina"
+
+[features]
+# By default, compile with ADX extension if the host supports it.
+# Binary can be executed on systems similar to the host.
+default = []
+# Compile in portable mode, without ISA extensions.
+# Binary can be executed on all systems.
+portable = []
+# Enable ADX even if the host CPU doesn't support it.
+# Binary can be executed on Broadwell+ and Ryzen+ systems.
+force-adx = []
+
+[dependencies]
+
+[build-dependencies]
+cc = "1.0"
+
+[target.'cfg(target_env = "msvc")'.build-dependencies]
+glob = "0.3"
+
+[dev-dependencies]
+rand = "^0"
+rand_chacha = "^0"
