@@ -1,0 +1,2 @@
+*.pl linguist-language=assembly
+*.h linguist-language=c
