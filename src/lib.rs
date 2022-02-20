@@ -4,9 +4,7 @@
 
 #![allow(dead_code)]
 
-use core::fmt;
-use core::mem::{size_of_val, MaybeUninit};
-use core::ops;
+use core::{fmt, mem::size_of_val, ops};
 
 #[derive(Default, Copy, Clone)]
 #[repr(transparent)]
@@ -119,16 +117,9 @@ macro_rules! pasta_impl {
 
         impl $field {
             pub fn reciprocal(&self) -> Self {
-                let mut out = MaybeUninit::<Self>::uninit();
-                unsafe {
-                    pasta_reciprocal(
-                        &mut (*out.as_mut_ptr()).0,
-                        &self.0,
-                        &$mod,
-                        $m0,
-                    );
-                    out.assume_init()
-                }
+                let mut out = Self::default();
+                unsafe { pasta_reciprocal(&mut out.0, &self.0, &$mod, $m0) };
+                out
             }
 
             pub fn pow(&self, p: Scalar) -> Self {
@@ -149,25 +140,30 @@ macro_rules! pasta_impl {
 
         impl core::convert::From<Scalar> for $field {
             fn from(s: Scalar) -> Self {
-                let mut out = MaybeUninit::<Self>::uninit();
-                unsafe {
-                    pasta_from_scalar(
-                        &mut (*out.as_mut_ptr()).0,
-                        &s,
-                        &$mod,
-                        $m0,
-                    );
-                    out.assume_init()
-                }
+                let mut out = Self::default();
+                unsafe { pasta_from_scalar(&mut out.0, &s, &$mod, $m0) };
+                out
+            }
+        }
+        impl<'a> core::convert::From<&'a Scalar> for $field {
+            fn from(s: &'a Scalar) -> Self {
+                let mut out = Self::default();
+                unsafe { pasta_from_scalar(&mut out.0, s, &$mod, $m0) };
+                out
             }
         }
         impl core::convert::From<$field> for Scalar {
             fn from(v: $field) -> Self {
-                let mut out = MaybeUninit::<Self>::uninit();
-                unsafe {
-                    pasta_to_scalar(out.as_mut_ptr(), &v.0, &$mod, $m0);
-                    out.assume_init()
-                }
+                let mut out = Self::default();
+                unsafe { pasta_to_scalar(&mut out, &v.0, &$mod, $m0) };
+                out
+            }
+        }
+        impl<'a> core::convert::From<&'a $field> for Scalar {
+            fn from(v: &'a $field) -> Self {
+                let mut out = Self::default();
+                unsafe { pasta_to_scalar(&mut out, &v.0, &$mod, $m0) };
+                out
             }
         }
 
@@ -363,10 +359,10 @@ macro_rules! pasta_impl {
 
         impl fmt::Debug for $field {
             fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                let mut tmp = MaybeUninit::<Scalar>::uninit();
+                let mut tmp = Scalar::default();
                 write!(f, "{:?}", unsafe {
-                    pasta_to_scalar(tmp.as_mut_ptr(), &self.0, &$mod, $m0);
-                    tmp.assume_init()
+                    pasta_to_scalar(&mut tmp, &self.0, &$mod, $m0);
+                    tmp
                 })
             }
         }
