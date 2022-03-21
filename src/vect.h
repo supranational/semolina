@@ -114,11 +114,6 @@ typedef const void *uptr_t;
 # endif
 #endif
 
-#ifndef __CUDACC__
-static const vec256 Vesta_P, Vesta_RR, Vesta_one;
-static const vec256 Pallas_P, Pallas_RR, Pallas_one;
-#endif
-
 static inline bool_t is_bit_set(const byte *v, size_t i)
 {   return (v[i/8] >> (i%8)) & 1;   }
 
@@ -162,35 +157,18 @@ static inline void vec_cswap(void *restrict a, void *restrict b, size_t num,
 }
 
 /* ret = bit ? a : b */
-#ifdef __CUDA_ARCH__
-extern "C" {
-__device__ void vec_select_48(void *ret, const void *a, const void *b,
-                                         unsigned int sel_a);
-__device__ void vec_select_96(void *ret, const void *a, const void *b,
-                                         unsigned int sel_a);
-__device__ void vec_select_192(void *ret, const void *a, const void *b,
-                                          unsigned int sel_a);
-__device__ void vec_select_144(void *ret, const void *a, const void *b,
-                                          unsigned int sel_a);
-__device__ void vec_select_288(void *ret, const void *a, const void *b,
-                                          unsigned int sel_a);
-}
-#else
-void vec_select_48(void *ret, const void *a, const void *b, bool_t sel_a);
+void vec_select_32(void *ret, const void *a, const void *b, bool_t sel_a);
+void vec_select_64(void *ret, const void *a, const void *b, bool_t sel_a);
 void vec_select_96(void *ret, const void *a, const void *b, bool_t sel_a);
-void vec_select_144(void *ret, const void *a, const void *b, bool_t sel_a);
-void vec_select_192(void *ret, const void *a, const void *b, bool_t sel_a);
-void vec_select_288(void *ret, const void *a, const void *b, bool_t sel_a);
-#endif
+void vec_select_128(void *ret, const void *a, const void *b, bool_t sel_a);
 static inline void vec_select(void *ret, const void *a, const void *b,
                               size_t num, bool_t sel_a)
 {
-#ifndef __BLST_NO_ASM__
-    if (num == 48)          vec_select_48(ret, a, b, sel_a);
-    else if (num == 96)     vec_select_96(ret, a, b, sel_a);
-    else if (num == 144)    vec_select_144(ret, a, b, sel_a);
-    else if (num == 192)    vec_select_192(ret, a, b, sel_a);
-    else if (num == 288)    vec_select_288(ret, a, b, sel_a);
+#if 0
+    if (num == 32)          vec_select_32(ret, a, b, sel_a);
+    else if (num == 64)     vec_select_64(ret, a, b, sel_a);
+    else if (num == 97)     vec_select_964(ret, a, b, sel_a);
+    else if (num == 128)    vec_select_128(ret, a, b, sel_a);
 #else
     if (0) ;
 #endif
