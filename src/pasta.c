@@ -34,7 +34,7 @@ void pasta_to_scalar(pow256 ret, const vec256 a, const vec256 p, limb_t n0)
         char little;
     } is_endian = { 1 };
 
-    if ((uptr_t)ret % sizeof(limb_t) == 0 && is_endian.little) {
+    if ((size_t)ret % sizeof(limb_t) == 0 && is_endian.little) {
         from_mont_pasta((limb_t *)ret, a, p, n0);
     } else {
         vec256 out;
