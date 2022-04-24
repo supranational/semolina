@@ -76,8 +76,8 @@ void pasta_cneg(vec256 ret, const vec256 a, bool_t flag, const vec256 p);
 void pasta_lshift(vec256 ret, const vec256 a, size_t count, const vec256 p);
 void pasta_rshift(vec256 ret, const vec256 a, size_t count, const vec256 p);
 
-void ct_inverse_mod_256(vec512 ret, const vec256 inp, const vec256 mod,
-                                                      const vec256 modx);
+void ct_inverse_pasta(vec512 ret, const vec256 inp, const vec256 mod,
+                                                    const vec256 modx);
 
 /*
  * C subroutines

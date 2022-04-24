@@ -19,11 +19,11 @@ void pasta_reciprocal(vec256 out, const vec256 inp, const vec256 mod, limb_t m0)
     vec512 temp;
 
     if ((byte)mod[1] == (byte)Pallas_P[1]) {
-        ct_inverse_mod_256(temp, inp, mod, Pallasx2);
+        ct_inverse_pasta(temp, inp, mod, Pallasx2);
         redc_mont_pasta(out, temp, mod, m0);
         mul_mont_pasta(out, Pallas_RR, out, mod, m0);
     } else {
-        ct_inverse_mod_256(temp, inp, mod, Vestax2);
+        ct_inverse_pasta(temp, inp, mod, Vestax2);
         redc_mont_pasta(out, temp, mod, m0);
         mul_mont_pasta(out, Vesta_RR, out, mod, m0);
     }
