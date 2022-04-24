@@ -1,9 +1,9 @@
 .text	
 
-.globl	_ct_inverse_mod_256
+.globl	_ct_inverse_pasta
 
 .p2align	5
-_ct_inverse_mod_256:
+_ct_inverse_pasta:
 .cfi_startproc
 	.byte	0xf3,0x0f,0x1e,0xfa
 

@@ -1,9 +1,9 @@
 .text
 
-.globl	_ct_inverse_mod_256
+.globl	_ct_inverse_pasta
 
 .align	5
-_ct_inverse_mod_256:
+_ct_inverse_pasta:
 .long	3573752639
 	stp	x29, x30, [sp,#-80]!
 	add	x29, sp, #0

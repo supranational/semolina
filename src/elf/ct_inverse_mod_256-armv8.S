@@ -1,9 +1,9 @@
 .text
 
-.globl	ct_inverse_mod_256
-.type	ct_inverse_mod_256, %function
+.globl	ct_inverse_pasta
+.type	ct_inverse_pasta, %function
 .align	5
-ct_inverse_mod_256:
+ct_inverse_pasta:
 	.inst	0xd503233f
 	stp	x29, x30, [sp,#-80]!
 	add	x29, sp, #0
@@ -447,7 +447,7 @@ ct_inverse_mod_256:
 	ldr	x29, [sp],#80
 	.inst	0xd50323bf
 	ret
-.size	ct_inverse_mod_256,.-ct_inverse_mod_256
+.size	ct_inverse_pasta,.-ct_inverse_pasta
 
 ////////////////////////////////////////////////////////////////////////
 .type	__smul_256x63, %function

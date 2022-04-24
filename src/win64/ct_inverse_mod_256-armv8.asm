@@ -1,9 +1,9 @@
 	AREA	|.text|,CODE,ALIGN=8,ARM64
 
 
-	EXPORT	|ct_inverse_mod_256|[FUNC]
+	EXPORT	|ct_inverse_pasta|[FUNC]
 	ALIGN	32
-|ct_inverse_mod_256| PROC
+|ct_inverse_pasta| PROC
 	DCDU	3573752639
 	stp	x29, x30, [sp,#-80]!
 	add	x29, sp, #0

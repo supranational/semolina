@@ -1,15 +1,15 @@
 OPTION	DOTNAME
 .text$	SEGMENT ALIGN(256) 'CODE'
 
-PUBLIC	ct_inverse_mod_256
+PUBLIC	ct_inverse_pasta
 
 ALIGN	32
-ct_inverse_mod_256	PROC PUBLIC
+ct_inverse_pasta	PROC PUBLIC
 	DB	243,15,30,250
 	mov	QWORD PTR[8+rsp],rdi	;WIN64 prologue
 	mov	QWORD PTR[16+rsp],rsi
 	mov	r11,rsp
-$L$SEH_begin_ct_inverse_mod_256::
+$L$SEH_begin_ct_inverse_pasta::
 	mov	rdi,rcx
 	mov	rsi,rdx
 	mov	rdx,r8
@@ -31,7 +31,7 @@ $L$SEH_begin_ct_inverse_mod_256::
 
 	sub	rsp,1072
 
-$L$SEH_body_ct_inverse_mod_256::
+$L$SEH_body_ct_inverse_pasta::
 
 
 	lea	rax,QWORD PTR[((48+511))+rsp]
@@ -631,14 +631,14 @@ $L$SEH_body_ct_inverse_mod_256::
 
 	lea	rsp,QWORD PTR[48+r8]
 
-$L$SEH_epilogue_ct_inverse_mod_256::
+$L$SEH_epilogue_ct_inverse_pasta::
 	mov	rdi,QWORD PTR[8+rsp]	;WIN64 epilogue
 	mov	rsi,QWORD PTR[16+rsp]
 
 	DB	0F3h,0C3h		;repret
 
-$L$SEH_end_ct_inverse_mod_256::
-ct_inverse_mod_256	ENDP
+$L$SEH_end_ct_inverse_pasta::
+ct_inverse_pasta	ENDP
 
 ALIGN	32
 __smulq_512x63	PROC PRIVATE
@@ -1168,28 +1168,28 @@ __inner_loop_62_256	ENDP
 .text$	ENDS
 .pdata	SEGMENT READONLY ALIGN(4)
 ALIGN	4
-	DD	imagerel $L$SEH_begin_ct_inverse_mod_256
-	DD	imagerel $L$SEH_body_ct_inverse_mod_256
-	DD	imagerel $L$SEH_info_ct_inverse_mod_256_prologue
+	DD	imagerel $L$SEH_begin_ct_inverse_pasta
+	DD	imagerel $L$SEH_body_ct_inverse_pasta
+	DD	imagerel $L$SEH_info_ct_inverse_pasta_prologue
 
-	DD	imagerel $L$SEH_body_ct_inverse_mod_256
-	DD	imagerel $L$SEH_epilogue_ct_inverse_mod_256
-	DD	imagerel $L$SEH_info_ct_inverse_mod_256_body
+	DD	imagerel $L$SEH_body_ct_inverse_pasta
+	DD	imagerel $L$SEH_epilogue_ct_inverse_pasta
+	DD	imagerel $L$SEH_info_ct_inverse_pasta_body
 
-	DD	imagerel $L$SEH_epilogue_ct_inverse_mod_256
-	DD	imagerel $L$SEH_end_ct_inverse_mod_256
-	DD	imagerel $L$SEH_info_ct_inverse_mod_256_epilogue
+	DD	imagerel $L$SEH_epilogue_ct_inverse_pasta
+	DD	imagerel $L$SEH_end_ct_inverse_pasta
+	DD	imagerel $L$SEH_info_ct_inverse_pasta_epilogue
 
 .pdata	ENDS
 .xdata	SEGMENT READONLY ALIGN(8)
 ALIGN	8
-$L$SEH_info_ct_inverse_mod_256_prologue::
+$L$SEH_info_ct_inverse_pasta_prologue::
 DB	1,0,5,00bh
 DB	0,074h,1,0
 DB	0,064h,2,0
 DB	0,003h
 DB	0,0
-$L$SEH_info_ct_inverse_mod_256_body::
+$L$SEH_info_ct_inverse_pasta_body::
 DB	1,0,18,0
 DB	000h,0f4h,086h,000h
 DB	000h,0e4h,087h,000h
@@ -1200,7 +1200,7 @@ DB	000h,054h,08bh,000h
 DB	000h,074h,08dh,000h
 DB	000h,064h,08eh,000h
 DB	000h,001h,08ch,000h
-$L$SEH_info_ct_inverse_mod_256_epilogue::
+$L$SEH_info_ct_inverse_pasta_epilogue::
 DB	1,0,4,0
 DB	000h,074h,001h,000h
 DB	000h,064h,002h,000h

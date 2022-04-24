@@ -1,9 +1,9 @@
 .text	
 
-.globl	ct_inverse_mod_256
-.type	ct_inverse_mod_256,@function
+.globl	ct_inverse_pasta
+.type	ct_inverse_pasta,@function
 .align	32
-ct_inverse_mod_256:
+ct_inverse_pasta:
 .cfi_startproc
 	.byte	0xf3,0x0f,0x1e,0xfa
 
@@ -630,7 +630,7 @@ ct_inverse_mod_256:
 
 	.byte	0xf3,0xc3
 .cfi_endproc	
-.size	ct_inverse_mod_256,.-ct_inverse_mod_256
+.size	ct_inverse_pasta,.-ct_inverse_pasta
 .type	__smulq_512x63,@function
 .align	32
 __smulq_512x63:

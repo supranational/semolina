@@ -1,11 +1,11 @@
 .text
 
-.globl	ct_inverse_mod_256
-.def	ct_inverse_mod_256;
+.globl	ct_inverse_pasta
+.def	ct_inverse_pasta;
 .type	32;
 .endef
 .p2align	5
-ct_inverse_mod_256:
+ct_inverse_pasta:
 .long	3573752639
 	stp	x29, x30, [sp,#-80]!
 	add	x29, sp, #0
