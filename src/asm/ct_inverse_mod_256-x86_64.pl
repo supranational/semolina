@@ -90,10 +90,10 @@ $frame = 8*6+2*512;
 $code.=<<___;
 .text
 
-.globl	ct_inverse_mod_256
-.type	ct_inverse_mod_256,\@function,4,"unwind"
+.globl	ct_inverse_pasta
+.type	ct_inverse_pasta,\@function,4,"unwind"
 .align	32
-ct_inverse_mod_256:
+ct_inverse_pasta:
 .cfi_startproc
 	push	%rbp
 .cfi_push	%rbp
@@ -349,7 +349,7 @@ $code.=<<___;
 .cfi_epilogue
 	ret
 .cfi_endproc
-.size	ct_inverse_mod_256,.-ct_inverse_mod_256
+.size	ct_inverse_pasta,.-ct_inverse_pasta
 ___
 ########################################################################
 # Signed |u|*|f?|+|v|*|g?| subroutines. "NNN" in "NNNx63" suffix refers

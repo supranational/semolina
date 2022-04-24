@@ -93,10 +93,10 @@ $frame = 16+2*512;
 $code.=<<___;
 .text
 
-.globl	ct_inverse_mod_256
-.type	ct_inverse_mod_256, %function
+.globl	ct_inverse_pasta
+.type	ct_inverse_pasta, %function
 .align	5
-ct_inverse_mod_256:
+ct_inverse_pasta:
 	paciasp
 	stp	x29, x30, [sp,#-80]!
 	add	x29, sp, #0
@@ -265,7 +265,7 @@ $code.=<<___;
 	ldr	x29, [sp],#80
 	autiasp
 	ret
-.size	ct_inverse_mod_256,.-ct_inverse_mod_256
+.size	ct_inverse_pasta,.-ct_inverse_pasta
 
 ////////////////////////////////////////////////////////////////////////
 .type	__smul_256x63, %function
