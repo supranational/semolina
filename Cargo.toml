@@ -9,6 +9,8 @@ readme = "README.md"
 include = [
     "/src/**",
     "/Cargo.toml",
+    "/build.rs",
+    "/README.md",
 ]
 links = "semolina"
 
