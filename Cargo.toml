@@ -2,6 +2,10 @@
 name = "semolina"
 version = "0.1.0"
 edition = "2018"
+license = "Apache-2.0"
+description = "Optimized field arithmetic for Pasta moduli for x86-64 and aarch64"
+repository = "https://github.com/supranational/semolina"
+readme = "README.md"
 include = [
     "/src/**",
     "/Cargo.toml",
