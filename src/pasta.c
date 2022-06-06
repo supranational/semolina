@@ -5,6 +5,7 @@
  */
 
 #include "consts.c"
+#include "bytes.h"
 
 void pasta_from_scalar(vec256 ret, const pow256 a, const vec256 p, limb_t n0)
 {

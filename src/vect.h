@@ -83,6 +83,11 @@ void ct_inverse_pasta(vec512 ret, const vec256 inp, const vec256 mod,
  * C subroutines
  */
 void pasta_reciprocal(vec256 ret, const vec256 a, const vec256 p, limb_t n0);
+void pasta_mul(vec256 out, const vec256 a, const vec256 b,
+                           const vec256 p, limb_t n0);
+void pasta_sqr(vec256 out, const vec256 a, const vec256 p, limb_t n0);
+void pasta_from(vec256 out, const vec256 a, const vec256 p, limb_t n0);
+void pasta_to_scalar(pow256 ret, const vec256 a, const vec256 p, limb_t n0);
 
 #ifdef __UINTPTR_TYPE__
 typedef __UINTPTR_TYPE__ uptr_t;
@@ -129,14 +134,6 @@ static inline bool_t bytes_are_zero(const unsigned char *a, size_t num)
         acc |= a[i];
 
     return byte_is_zero(acc);
-}
-
-static inline void bytes_zero(unsigned char *a, size_t num)
-{
-    size_t i;
-
-    for (i = 0; i < num; i++)
-        a[i] = 0;
 }
 
 static inline void vec_cswap(void *restrict a, void *restrict b, size_t num,
@@ -246,100 +243,6 @@ static inline void vec_zero(void *ret, size_t num)
     asm volatile("" : : "r"(ret) : "memory");
 #endif
 }
-
-static inline void limbs_from_be_bytes(limb_t *restrict ret,
-                                       const unsigned char *in, size_t n)
-{
-    limb_t limb = 0;
-
-    while(n--) {
-        limb <<= 8;
-        limb |= *in++;
-        /*
-         * 'if (n % sizeof(limb_t) == 0)' is omitted because it's cheaper
-         * to perform redundant stores than to pay penalty for
-         * mispredicted branch. Besides, some compilers unroll the
-         * loop and remove redundant stores to 'restict'-ed storage...
-         */
-        ret[n / sizeof(limb_t)] = limb;
-    }
-}
-
-static inline void be_bytes_from_limbs(unsigned char *out, const limb_t *in,
-                                       size_t n)
-{
-    limb_t limb;
-
-    while(n--) {
-        limb = in[n / sizeof(limb_t)];
-        *out++ = (unsigned char)(limb >> (8 * (n % sizeof(limb_t))));
-    }
-}
-
-static inline void limbs_from_le_bytes(limb_t *restrict ret,
-                                       const unsigned char *in, size_t n)
-{
-    limb_t limb = 0;
-
-    while(n--) {
-        limb <<= 8;
-        limb |= in[n];
-        /*
-         * 'if (n % sizeof(limb_t) == 0)' is omitted because it's cheaper
-         * to perform redundant stores than to pay penalty for
-         * mispredicted branch. Besides, some compilers unroll the
-         * loop and remove redundant stores to 'restict'-ed storage...
-         */
-        ret[n / sizeof(limb_t)] = limb;
-    }
-}
-
-static inline void le_bytes_from_limbs(unsigned char *out, const limb_t *in,
-                                       size_t n)
-{
-    const union {
-        long one;
-        char little;
-    } is_endian = { 1 };
-    limb_t limb;
-    size_t i, j, r;
-
-    if ((uptr_t)out == (uptr_t)in && is_endian.little)
-        return;
-
-    r = n % sizeof(limb_t);
-    n /= sizeof(limb_t);
-
-    for(i = 0; i < n; i++) {
-        for (limb = in[i], j = 0; j < sizeof(limb_t); j++, limb >>= 8)
-            *out++ = (unsigned char)limb;
-    }
-    if (r) {
-        for (limb = in[i], j = 0; j < r; j++, limb >>= 8)
-            *out++ = (unsigned char)limb;
-    }
-}
-
-/*
- * Some compilers get arguably overzealous(*) when passing pointer to
- * multi-dimensional array [such as vec384x] as 'const' argument.
- * General direction seems to be to legitimize such constification,
- * so it's argued that suppressing the warning is appropriate.
- *
- * (*)  http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1923.htm
- */
-#if defined(__INTEL_COMPILER)
-# pragma warning(disable:167)
-# pragma warning(disable:556)
-#elif defined(__GNUC__) && !defined(__clang__)
-# pragma GCC diagnostic ignored "-Wpedantic"
-#elif defined(_MSC_VER)
-# pragma warning(disable: 4127 4189)
-#endif
-
-#if !defined(__wasm__)
-# include <stdlib.h>
-#endif
 
 #if defined(__GNUC__)
 # ifndef alloca
