@@ -62,11 +62,12 @@ fn main() {
 
     cc.flag_if_supported("-mno-avx") // avoid costly transitions
         .flag_if_supported("-fno-builtin")
+        .flag_if_supported("-Wno-unused-function")
         .flag_if_supported("-Wno-unused-command-line-argument");
     if !cfg!(debug_assertions) {
         cc.opt_level(2);
     }
-    cc.files(&files).compile("libsemolina.a");
+    cc.files(&files).compile("semolina");
 
     if let Some(manifest_dir) = env::var_os("CARGO_MANIFEST_DIR") {
         let c_include = Path::new(&manifest_dir).join("src");
