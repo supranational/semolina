@@ -171,7 +171,7 @@ public:
     friend inline bool operator!=(const pasta_t& a, const pasta_t& b)
     {   return !vec_is_equal(a, b, sizeof(vec256));   }
 
-# ifdef stdout  // a kludge to detect if stdio.h was included 
+# if defined(_GLIBCXX_IOSTREAM) || defined(_IOSTREAM_) // non-standard
     friend std::ostream& operator<<(std::ostream& os, const pasta_t& obj)
     {
         unsigned char be[sizeof(obj)];
