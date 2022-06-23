@@ -24,11 +24,14 @@ private:
     inline const limb_t& operator[](size_t i) const { return val[i]; }
 
 public:
+    static const size_t nbits = 255;
+    typedef byte pow_t[256/8];
+
     inline pasta_t() {}
     inline pasta_t(const vec256 p)
     {   vec_copy(val, p, sizeof(val));   }
 
-    inline void to_scalar(pow256& scalar) const
+    inline void to_scalar(pow_t& scalar) const
     {   pasta_to_scalar(scalar, val, MOD, M0);   }
 
     static inline const pasta_t& one()
