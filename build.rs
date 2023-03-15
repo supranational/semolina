@@ -74,4 +74,5 @@ fn main() {
         // set DEP_SEMOLINA_C_INCLUDE for dependents
         println!("cargo:C_INCLUDE={}", c_include.to_string_lossy());
     }
+    println!("cargo:rerun-if-changed=src");
 }
