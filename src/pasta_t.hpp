@@ -5,12 +5,23 @@
 #ifndef __PASTA_T_HPP__
 #define __PASTA_T_HPP__
 
+#ifdef __GNUC__
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wunused-function"
+#endif
+
 extern "C" {
 # include "vect.h"
 }
 
 #ifndef NDEBUG
 # include "bytes.h"
+#endif
+
+#undef launder // avoid conflict with C++ >=17
+
+#ifdef __GNUC__
+# pragma GCC diagnostic pop
 #endif
 
 template<const vec256 MOD, const limb_t M0,
@@ -25,6 +36,7 @@ private:
 
 public:
     static const size_t nbits = 255;
+    static constexpr size_t bit_length() { return nbits; }
     typedef byte pow_t[256/8];
 
     inline pasta_t() {}
@@ -120,10 +132,19 @@ public:
             pasta_sqr(ret, a, MOD, M0);
             return ret;
         } else {
-            pasta_t ret;
-            pasta_sqr(ret, a, MOD, M0);
-            for (p -= 2; p--;)
-                pasta_mul(ret, ret, a, MOD, M0);
+            pasta_t ret = a, sqr = a;
+            if ((p&1) == 0) {
+                do {
+                    pasta_sqr(sqr, sqr, MOD, M0);
+                    p >>= 1;
+                } while ((p&1) == 0);
+                ret = sqr;
+            }
+            for (p >>= 1; p; p >>= 1) {
+                pasta_sqr(sqr, sqr, MOD, M0);
+                if (p&1)
+                    pasta_mul(ret, ret, sqr, MOD, M0);
+            }
             return ret;
         }
     }
@@ -147,6 +168,13 @@ public:
 
     inline void zero()
     {   vec_zero(val, sizeof(val));   }
+
+    friend inline pasta_t czero(const pasta_t& a, int set_z)
+    {   pasta_t ret;
+        const vec256 zero = { 0 };
+        vec_select(ret, zero, a, sizeof(ret), set_z);
+        return ret;
+    }
 
     pasta_t reciprocal() const
     {
