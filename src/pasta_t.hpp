@@ -34,10 +34,13 @@ private:
     inline limb_t& operator[](size_t i)             { return val[i]; }
     inline const limb_t& operator[](size_t i) const { return val[i]; }
 
+    static const size_t n = sizeof(vec256)/sizeof(limb_t);
 public:
     static const size_t nbits = 255;
     static constexpr size_t bit_length() { return nbits; }
+    static const uint32_t degree = 1;
     typedef byte pow_t[256/8];
+    typedef pasta_t mem_t;
 
     inline pasta_t() {}
     inline pasta_t(const vec256 p)
@@ -48,6 +51,15 @@ public:
 
     static inline const pasta_t& one()
     {   return *reinterpret_cast<const pasta_t*>(ONE);   }
+
+    static inline pasta_t one(bool or_zero)
+    {
+        pasta_t ret;
+        limb_t mask = ~((limb_t)0 - or_zero);
+        for (size_t i = 0; i < n; i++)
+            ret[i] = ONE[i] & mask;
+        return ret;
+    }
 
     inline pasta_t& to()
     {   pasta_mul(val, RR, val, MOD, M0);       return *this;   }
@@ -77,7 +89,7 @@ public:
 
     inline pasta_t& operator>>=(unsigned r)
     {   pasta_rshift(val, val, r, MOD);         return *this;   }
-    friend inline pasta_t operator>>(pasta_t a, unsigned r)
+    friend inline pasta_t operator>>(const pasta_t& a, unsigned r)
     {
         pasta_t ret;
         pasta_rshift(ret, a, r, MOD);
