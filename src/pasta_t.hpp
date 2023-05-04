@@ -175,6 +175,9 @@ public:
     friend inline pasta_t sqr(const pasta_t& a)
     {   return a^2;   }
 
+    inline bool is_one() const
+    {   return vec_is_equal(val, ONE, sizeof(val));   }
+
     inline bool is_zero() const
     {   return vec_is_zero(val, sizeof(val));   }
 
