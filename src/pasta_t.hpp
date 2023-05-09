@@ -191,6 +191,12 @@ public:
         return ret;
     }
 
+    static inline pasta_t csel(const pasta_t& a, const pasta_t& b, int sel_a)
+    {   pasta_t ret;
+        vec_select(ret, a, b, sizeof(ret), sel_a);
+        return ret;
+    }
+
     pasta_t reciprocal() const
     {
         pasta_t ret;
