@@ -5,6 +5,8 @@
 #ifndef __PASTA_T_HPP__
 #define __PASTA_T_HPP__
 
+#include <cstdlib>
+
 #ifdef __GNUC__
 # pragma GCC diagnostic push
 # pragma GCC diagnostic ignored "-Wunused-function"
@@ -38,7 +40,7 @@ private:
 public:
     static const size_t nbits = 255;
     static constexpr size_t bit_length() { return nbits; }
-    static const uint32_t degree = 1;
+    static const unsigned int degree = 1;
     typedef byte pow_t[256/8];
     typedef pasta_t mem_t;
 
