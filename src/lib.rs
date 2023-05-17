@@ -205,6 +205,85 @@ macro_rules! pasta_impl {
             }
         }
 
+        impl ops::Div for $field {
+            type Output = Self;
+
+            fn div(self, other: Self) -> Self {
+                let mut out = Self::default();
+                unsafe {
+                    pasta_reciprocal(&mut out.0, &other.0, &$mod, $m0);
+                    pasta_mul(&mut out.0, &out.0, &self.0, &$mod, $m0);
+                };
+                out
+            }
+        }
+        impl<'a> ops::Div<&'a Self> for $field {
+            type Output = Self;
+
+            fn div(self, other: &'a Self) -> Self {
+                let mut out = Self::default();
+                unsafe {
+                    pasta_reciprocal(&mut out.0, &other.0, &$mod, $m0);
+                    pasta_mul(&mut out.0, &out.0, &self.0, &$mod, $m0);
+                };
+                out
+            }
+        }
+        impl<'a, 'b> ops::Div<&'a Self> for &'b $field {
+            type Output = <$field as ops::Div>::Output;
+
+            fn div(self, other: &'a Self) -> Self::Output {
+                let mut out = Self::Output::default();
+                unsafe {
+                    pasta_reciprocal(&mut out.0, &other.0, &$mod, $m0);
+                    pasta_mul(&mut out.0, &out.0, &self.0, &$mod, $m0);
+                };
+                out
+            }
+        }
+        impl ops::Div<$field> for i32 {
+            type Output = $field;
+
+            fn div(self, other: Self::Output) -> Self::Output {
+                if self != 1 {
+                    panic!("only 1/<$field> is supported");
+                }
+                let mut out = Self::Output::default();
+                unsafe { pasta_reciprocal(&mut out.0, &other.0, &$mod, $m0) };
+                out
+            }
+        }
+        impl<'a> ops::Div<&'a $field> for i32 {
+            type Output = $field;
+
+            fn div(self, other: &'a Self::Output) -> Self::Output {
+                if self != 1 {
+                    panic!("only 1/<$field> is supported");
+                }
+                let mut out = Self::Output::default();
+                unsafe { pasta_reciprocal(&mut out.0, &other.0, &$mod, $m0) };
+                out
+            }
+        }
+        impl ops::DivAssign for $field {
+            fn div_assign(&mut self, other: Self) {
+                let mut inv = Self::default();
+                unsafe {
+                    pasta_reciprocal(&mut inv.0, &other.0, &$mod, $m0);
+                    pasta_mul(&mut self.0, &self.0, &inv.0, &$mod, $m0);
+                };
+            }
+        }
+        impl<'a> ops::DivAssign<&'a Self> for $field {
+            fn div_assign(&mut self, other: &'a Self) {
+                let mut inv = Self::default();
+                unsafe {
+                    pasta_reciprocal(&mut inv.0, &other.0, &$mod, $m0);
+                    pasta_mul(&mut self.0, &self.0, &inv.0, &$mod, $m0);
+                };
+            }
+        }
+
         impl ops::Add for $field {
             type Output = Self;
 
@@ -460,7 +539,7 @@ mod tests {
                     let expr = format!("({}*{}) % p == {}", x, y, px * py);
                     cmd += &format!("assert {}, \"{}\"\n", expr, expr);
 
-                    let expr = format!("({}*{}) % p == 1", x, px.reciprocal());
+                    let expr = format!("({}*{}) % p == 1", x, 1 / px);
                     cmd += &format!("assert {}, \"{}\"\n", expr, expr);
 
                     let px79 = px << 79;
@@ -500,7 +579,7 @@ mod tests {
                     let expr = format!("({}*{}) % q == {}", x, y, vx * vy);
                     cmd += &format!("assert {}, \"{}\"\n", expr, expr);
 
-                    let expr = format!("({}*{}) % q == 1", x, vx.reciprocal());
+                    let expr = format!("({}*{}) % q == 1", x, 1 / vx);
                     cmd += &format!("assert {}, \"{}\"\n", expr, expr);
 
                     let vx79 = vx << 79;
