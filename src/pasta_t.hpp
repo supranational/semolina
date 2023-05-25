@@ -180,7 +180,7 @@ public:
     inline bool is_one() const
     {   return vec_is_equal(val, ONE, sizeof(val));   }
 
-    inline bool is_zero() const
+    inline int is_zero() const
     {   return vec_is_zero(val, sizeof(val));   }
 
     inline void zero()
