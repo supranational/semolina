@@ -25,7 +25,11 @@
 #  endif
 # endif
 #elif defined(__aarch64__)
-# if defined(__ELF__)
+# if defined(__CHERI_PURE_CAPABILITY__)
+#  include "cheri/ct_inverse_mod_256-armv8.S"
+#  include "cheri/pasta_add-armv8.S"
+#  include "cheri/pasta_mul-armv8.S"
+# elif defined(__ELF__)
 #  include "elf/ct_inverse_mod_256-armv8.S"
 #  include "elf/pasta_add-armv8.S"
 #  include "elf/pasta_mul-armv8.S"
