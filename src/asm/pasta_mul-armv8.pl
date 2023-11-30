@@ -35,11 +35,11 @@ $code.=<<___;
 .type	mul_mont_pasta,%function
 .align	5
 mul_mont_pasta:
-	stp	x29,x30,[sp,#-64]!
-	add	x29,sp,#0
-	stp	x19,x20,[sp,#16]
-	stp	x21,x22,[sp,#32]
-	stp	x23,x24,[sp,#48]
+	stp	c29,c30,[csp,#-8*__SIZEOF_POINTER__]!
+	add	c29,csp,#0
+	stp	c19,c20,[csp,#2*__SIZEOF_POINTER__]
+	stp	c21,c22,[csp,#4*__SIZEOF_POINTER__]
+	stp	c23,c24,[csp,#6*__SIZEOF_POINTER__]
 
 	ldp	@a[0],@a[1],[$a_ptr]
 	ldr	$bi,        [$b_ptr]
@@ -141,10 +141,10 @@ $code.=<<___;
 	stp	@acc[0],@acc[1],[$r_ptr]
 	stp	@acc[2],@acc[3],[$r_ptr,#16]
 
-	ldp	x19,x20,[x29,#16]
-	ldp	x21,x22,[x29,#32]
-	ldp	x23,x24,[x29,#48]
-	ldr	x29,[sp],#64
+	ldp	c19,c20,[c29,#2*__SIZEOF_POINTER__]
+	ldp	c21,c22,[c29,#4*__SIZEOF_POINTER__]
+	ldp	c23,c24,[c29,#6*__SIZEOF_POINTER__]
+	ldr	c29,[csp],#8*__SIZEOF_POINTER__
 	ret
 .size	mul_mont_pasta,.-mul_mont_pasta
 ___
@@ -159,10 +159,10 @@ $code.=<<___;
 .align	5
 sqr_mont_pasta:
 	paciasp
-	stp	x29,x30,[sp,#-48]!
-	add	x29,sp,#0
-	stp	x19,x20,[sp,#16]
-	stp	x21,x22,[sp,#32]
+	stp	c29,c30,[csp,#-6*__SIZEOF_POINTER__]!
+	add	c29,csp,#0
+	stp	c19,c20,[csp,#2*__SIZEOF_POINTER__]
+	stp	c21,c22,[csp,#4*__SIZEOF_POINTER__]
 
 	ldp	@a[0],@a[1],[$a_ptr]
 	ldp	@a[2],@a[3],[$a_ptr,#16]
@@ -234,7 +234,7 @@ sqr_mont_pasta:
 	adc	@acc[7],@acc[7],@a[3]
 
 	bl	__mul_by_1_mont_pasta
-	ldr	x30,[x29,#8]
+	ldr	c30,[c29,#__SIZEOF_POINTER__]
 
 	adds	@acc[0],@acc[0],@acc[4]	// accumulate upper half
 	adcs	@acc[1],@acc[1],@acc[5]
@@ -256,9 +256,9 @@ sqr_mont_pasta:
 	stp	@acc[0],@acc[1],[$r_ptr]
 	stp	@acc[2],@acc[3],[$r_ptr,#16]
 
-	ldp	x19,x20,[x29,#16]
-	ldp	x21,x22,[x29,#32]
-	ldr	x29,[sp],#48
+	ldp	c19,c20,[c29,#2*__SIZEOF_POINTER__]
+	ldp	c21,c22,[c29,#4*__SIZEOF_POINTER__]
+	ldr	c29,[csp],#6*__SIZEOF_POINTER__
 	autiasp
 	ret
 .size	sqr_mont_pasta,.-sqr_mont_pasta
@@ -274,15 +274,15 @@ $code.=<<___;
 .align	5
 from_mont_pasta:
 	paciasp
-	stp	x29,x30,[sp,#-16]!
-	add	x29,sp,#0
+	stp	c29,c30,[csp,#-2*__SIZEOF_POINTER__]!
+	add	c29,csp,#0
 
 	mov	$n0,$n_ptr
 	ldp	@a[0],@a[1],[$a_ptr]
 	ldp	@a[2],@a[3],[$a_ptr,#16]
 
 	bl	__mul_by_1_mont_pasta
-	ldr	x30,[x29,#8]
+	ldr	c30,[c29,#__SIZEOF_POINTER__]
 
 	subs	@tmp[0],@a[0],@mod[0]
 	sbcs	@tmp[1],@a[1],@mod[1]
@@ -297,7 +297,7 @@ from_mont_pasta:
 	stp	@a[0],@a[1],[$r_ptr]
 	stp	@a[2],@a[3],[$r_ptr,#16]
 
-	ldr	x29,[sp],#16
+	ldr	c29,[csp],#2*__SIZEOF_POINTER__
 	autiasp
 	ret
 .size	from_mont_pasta,.-from_mont_pasta
@@ -308,15 +308,15 @@ from_mont_pasta:
 .align	5
 redc_mont_pasta:
 	paciasp
-	stp	x29,x30,[sp,#-16]!
-	add	x29,sp,#0
+	stp	c29,c30,[csp,#-2*__SIZEOF_POINTER__]!
+	add	c29,csp,#0
 
 	mov	$n0,$n_ptr
 	ldp	@a[0],@a[1],[$a_ptr]
 	ldp	@a[2],@a[3],[$a_ptr,#16]
 
 	bl	__mul_by_1_mont_pasta
-	ldr	x30,[x29,#8]
+	ldr	c30,[c29,#__SIZEOF_POINTER__]
 
 	ldp	@tmp[0],@tmp[1],[$a_ptr,#32]
 	ldp	@tmp[2],@tmp[3],[$a_ptr,#48]
@@ -341,7 +341,7 @@ redc_mont_pasta:
 	stp	@a[0],@a[1],[$r_ptr]
 	stp	@a[2],@a[3],[$r_ptr,#16]
 
-	ldr	x29,[sp],#16
+	ldr	c29,[csp],#2*__SIZEOF_POINTER__
 	autiasp
 	ret
 .size	redc_mont_pasta,.-redc_mont_pasta
@@ -416,12 +416,12 @@ $code.=<<___;
 .type	sqr_n_mul_mont_pasta,%function
 .align	5
 sqr_n_mul_mont_pasta:
-	stp	x29,x30,[sp,#-80]!
-	add	x29,sp,#0
-	stp	x19,x20,[sp,#16]
-	stp	x21,x22,[sp,#32]
-	stp	x23,x24,[sp,#48]
-	//stp	x25,x26,[sp,#64]
+	stp	c29,c30,[csp,#-10*__SIZEOF_POINTER__]!
+	add	c29,csp,#0
+	stp	c19,c20,[csp,#2*__SIZEOF_POINTER__]
+	stp	c21,c22,[csp,#4*__SIZEOF_POINTER__]
+	stp	c23,c24,[csp,#6*__SIZEOF_POINTER__]
+	//stp	c25,c26,[csp,#8*__SIZEOF_POINTER__]
 
 	ldp	@a[0],@a[1],[$a_ptr]
 	ldp	@a[2],@a[3],[$a_ptr,#16]
@@ -629,11 +629,11 @@ $code.=<<___;
 	stp	@acc[0],@acc[1],[$r_ptr]
 	stp	@acc[2],@acc[3],[$r_ptr,#16]
 
-	ldp	x19,x20,[x29,#16]
-	ldp	x21,x22,[x29,#32]
-	ldp	x23,x24,[x29,#48]
-	//ldp	x25,x26,[x29,#64]
-	ldr	x29,[sp],#80
+	ldp	c19,c20,[c29,#2*__SIZEOF_POINTER__]
+	ldp	c21,c22,[c29,#4*__SIZEOF_POINTER__]
+	ldp	c23,c24,[c29,#6*__SIZEOF_POINTER__]
+	//ldp	c25,c26,[c29,#8*__SIZEOF_POINTER__]
+	ldr	c29,[csp],#10*__SIZEOF_POINTER__
 	ret
 .size	sqr_n_mul_mont_pasta,.-sqr_n_mul_mont_pasta
 ___
