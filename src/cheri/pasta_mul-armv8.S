@@ -1,24 +1,24 @@
 .text
 
-.globl	_mul_mont_pasta
-.private_extern	_mul_mont_pasta
-
+.globl	mul_mont_pasta
+.hidden	mul_mont_pasta
+.type	mul_mont_pasta,%function
 .align	5
-_mul_mont_pasta:
-	stp	x29,x30,[sp,#-8*__SIZEOF_POINTER__]!
-	add	x29,sp,#0
-	stp	x19,x20,[sp,#2*__SIZEOF_POINTER__]
-	stp	x21,x22,[sp,#4*__SIZEOF_POINTER__]
-	stp	x23,x24,[sp,#6*__SIZEOF_POINTER__]
+mul_mont_pasta:
+	stp	c29,c30,[csp,#-8*__SIZEOF_POINTER__]!
+	add	c29,csp,#0
+	stp	c19,c20,[csp,#2*__SIZEOF_POINTER__]
+	stp	c21,c22,[csp,#4*__SIZEOF_POINTER__]
+	stp	c23,c24,[csp,#6*__SIZEOF_POINTER__]
 
-	ldp	x10,x11,[x1]
-	ldr	x9,        [x2]
-	ldp	x12,x13,[x1,#16]
+	ldp	x10,x11,[c1]
+	ldr	x9,        [c2]
+	ldp	x12,x13,[c1,#16]
 
 	mul	x19,x10,x9
-	ldp	x5,x6,[x3]
+	ldp	x5,x6,[c3]
 	mul	x20,x11,x9
-	ldp	x7,x8,[x3,#16]
+	ldp	x7,x8,[c3,#16]
 	mul	x21,x12,x9
 	mul	x22,x13,x9
 
@@ -35,7 +35,7 @@ _mul_mont_pasta:
 	//mul	x16,x7,x3	//x7==0
 	adc	x23,xzr,    x17
 	lsl	x17,x3,#62		//mul	x17,x8,x3
-	ldr	x9,[x2,8*1]
+	ldr	x9,[c2,8*1]
 	subs	xzr,x19,#1		//adds	x19,x19,x14
 	umulh	x14,x5,x3
 	adcs	x20,x20,x15
@@ -75,7 +75,7 @@ _mul_mont_pasta:
 	//mul	x16,x7,x3	//x7==0
 	adc	x23,x23,x17
 	lsl	x17,x3,#62		//mul	x17,x8,x3
-	ldr	x9,[x2,8*2]
+	ldr	x9,[c2,8*2]
 	subs	xzr,x19,#1		//adds	x19,x19,x14
 	umulh	x14,x5,x3
 	adcs	x20,x20,x15
@@ -115,7 +115,7 @@ _mul_mont_pasta:
 	//mul	x16,x7,x3	//x7==0
 	adc	x23,x23,x17
 	lsl	x17,x3,#62		//mul	x17,x8,x3
-	ldr	x9,[x2,8*3]
+	ldr	x9,[c2,8*3]
 	subs	xzr,x19,#1		//adds	x19,x19,x14
 	umulh	x14,x5,x3
 	adcs	x20,x20,x15
@@ -182,28 +182,28 @@ _mul_mont_pasta:
 	csel	x21,x21,x16,lo
 	csel	x22,x22,x17,lo
 
-	stp	x19,x20,[x0]
-	stp	x21,x22,[x0,#16]
+	stp	x19,x20,[c0]
+	stp	x21,x22,[c0,#16]
 
-	ldp	x19,x20,[x29,#2*__SIZEOF_POINTER__]
-	ldp	x21,x22,[x29,#4*__SIZEOF_POINTER__]
-	ldp	x23,x24,[x29,#6*__SIZEOF_POINTER__]
-	ldr	x29,[sp],#8*__SIZEOF_POINTER__
+	ldp	c19,c20,[c29,#2*__SIZEOF_POINTER__]
+	ldp	c21,c22,[c29,#4*__SIZEOF_POINTER__]
+	ldp	c23,c24,[c29,#6*__SIZEOF_POINTER__]
+	ldr	c29,[csp],#8*__SIZEOF_POINTER__
 	ret
-
-.globl	_sqr_mont_pasta
-.private_extern	_sqr_mont_pasta
-
+.size	mul_mont_pasta,.-mul_mont_pasta
+.globl	sqr_mont_pasta
+.hidden	sqr_mont_pasta
+.type	sqr_mont_pasta,%function
 .align	5
-_sqr_mont_pasta:
-.long	3573752639
-	stp	x29,x30,[sp,#-6*__SIZEOF_POINTER__]!
-	add	x29,sp,#0
-	stp	x19,x20,[sp,#2*__SIZEOF_POINTER__]
-	stp	x21,x22,[sp,#4*__SIZEOF_POINTER__]
+sqr_mont_pasta:
+	.inst	0xd503233f
+	stp	c29,c30,[csp,#-6*__SIZEOF_POINTER__]!
+	add	c29,csp,#0
+	stp	c19,c20,[csp,#2*__SIZEOF_POINTER__]
+	stp	c21,c22,[csp,#4*__SIZEOF_POINTER__]
 
-	ldp	x5,x6,[x1]
-	ldp	x7,x8,[x1,#16]
+	ldp	x5,x6,[c1]
+	ldp	x7,x8,[c1,#16]
 	mov	x4,x3
 
 	////////////////////////////////////////////////////////////////
@@ -272,7 +272,7 @@ _sqr_mont_pasta:
 	adc	x22,x22,x8
 
 	bl	__mul_by_1_mont_pasta
-	ldr	x30,[x29,#__SIZEOF_POINTER__]
+	ldr	c30,[c29,#__SIZEOF_POINTER__]
 
 	adds	x10,x10,x19	// accumulate upper half
 	adcs	x11,x11,x20
@@ -291,30 +291,30 @@ _sqr_mont_pasta:
 	csel	x12,x12,x16,lo
 	csel	x13,x13,x17,lo
 
-	stp	x10,x11,[x0]
-	stp	x12,x13,[x0,#16]
+	stp	x10,x11,[c0]
+	stp	x12,x13,[c0,#16]
 
-	ldp	x19,x20,[x29,#2*__SIZEOF_POINTER__]
-	ldp	x21,x22,[x29,#4*__SIZEOF_POINTER__]
-	ldr	x29,[sp],#6*__SIZEOF_POINTER__
-.long	3573752767
+	ldp	c19,c20,[c29,#2*__SIZEOF_POINTER__]
+	ldp	c21,c22,[c29,#4*__SIZEOF_POINTER__]
+	ldr	c29,[csp],#6*__SIZEOF_POINTER__
+	.inst	0xd50323bf
 	ret
-
-.globl	_from_mont_pasta
-.private_extern	_from_mont_pasta
-
+.size	sqr_mont_pasta,.-sqr_mont_pasta
+.globl	from_mont_pasta
+.hidden	from_mont_pasta
+.type	from_mont_pasta,%function
 .align	5
-_from_mont_pasta:
-.long	3573752639
-	stp	x29,x30,[sp,#-2*__SIZEOF_POINTER__]!
-	add	x29,sp,#0
+from_mont_pasta:
+	.inst	0xd503233f
+	stp	c29,c30,[csp,#-2*__SIZEOF_POINTER__]!
+	add	c29,csp,#0
 
 	mov	x4,x3
-	ldp	x10,x11,[x1]
-	ldp	x12,x13,[x1,#16]
+	ldp	x10,x11,[c1]
+	ldp	x12,x13,[c1,#16]
 
 	bl	__mul_by_1_mont_pasta
-	ldr	x30,[x29,#__SIZEOF_POINTER__]
+	ldr	c30,[c29,#__SIZEOF_POINTER__]
 
 	subs	x14,x10,x5
 	sbcs	x15,x11,x6
@@ -326,32 +326,32 @@ _from_mont_pasta:
 	csel	x12,x12,x16,lo
 	csel	x13,x13,x17,lo
 
-	stp	x10,x11,[x0]
-	stp	x12,x13,[x0,#16]
+	stp	x10,x11,[c0]
+	stp	x12,x13,[c0,#16]
 
-	ldr	x29,[sp],#2*__SIZEOF_POINTER__
-.long	3573752767
+	ldr	c29,[csp],#2*__SIZEOF_POINTER__
+	.inst	0xd50323bf
 	ret
+.size	from_mont_pasta,.-from_mont_pasta
 
-
-.globl	_redc_mont_pasta
-.private_extern	_redc_mont_pasta
-
+.globl	redc_mont_pasta
+.hidden	redc_mont_pasta
+.type	redc_mont_pasta,%function
 .align	5
-_redc_mont_pasta:
-.long	3573752639
-	stp	x29,x30,[sp,#-2*__SIZEOF_POINTER__]!
-	add	x29,sp,#0
+redc_mont_pasta:
+	.inst	0xd503233f
+	stp	c29,c30,[csp,#-2*__SIZEOF_POINTER__]!
+	add	c29,csp,#0
 
 	mov	x4,x3
-	ldp	x10,x11,[x1]
-	ldp	x12,x13,[x1,#16]
+	ldp	x10,x11,[c1]
+	ldp	x12,x13,[c1,#16]
 
 	bl	__mul_by_1_mont_pasta
-	ldr	x30,[x29,#__SIZEOF_POINTER__]
+	ldr	c30,[c29,#__SIZEOF_POINTER__]
 
-	ldp	x14,x15,[x1,#32]
-	ldp	x16,x17,[x1,#48]
+	ldp	x14,x15,[c1,#32]
+	ldp	x16,x17,[c1,#48]
 
 	adds	x10,x10,x14
 	adcs	x11,x11,x15
@@ -370,20 +370,20 @@ _redc_mont_pasta:
 	csel	x12,x12,x16,lo
 	csel	x13,x13,x17,lo
 
-	stp	x10,x11,[x0]
-	stp	x12,x13,[x0,#16]
+	stp	x10,x11,[c0]
+	stp	x12,x13,[c0,#16]
 
-	ldr	x29,[sp],#2*__SIZEOF_POINTER__
-.long	3573752767
+	ldr	c29,[csp],#2*__SIZEOF_POINTER__
+	.inst	0xd50323bf
 	ret
+.size	redc_mont_pasta,.-redc_mont_pasta
 
-
-
+.type	__mul_by_1_mont_pasta,%function
 .align	5
 __mul_by_1_mont_pasta:
 	mul	x3,x4,x10
-	ldp	x5,x6,[x2]
-	ldp	x7,x8,[x2,#16]
+	ldp	x5,x6,[c2]
+	ldp	x7,x8,[c2,#16]
 	//mul	x14,x5,x3
 	mul	x15,x6,x3
 	//mul	x16,x7,x3	//mod[2]==0
@@ -461,26 +461,26 @@ __mul_by_1_mont_pasta:
 	adc	x13,x9,x17
 
 	ret
-
-.globl	_sqr_n_mul_mont_pasta
-.private_extern	_sqr_n_mul_mont_pasta
-
+.size	__mul_by_1_mont_pasta,.-__mul_by_1_mont_pasta
+.globl	sqr_n_mul_mont_pasta
+.hidden	sqr_n_mul_mont_pasta
+.type	sqr_n_mul_mont_pasta,%function
 .align	5
-_sqr_n_mul_mont_pasta:
-	stp	x29,x30,[sp,#-10*__SIZEOF_POINTER__]!
-	add	x29,sp,#0
-	stp	x19,x20,[sp,#2*__SIZEOF_POINTER__]
-	stp	x21,x22,[sp,#4*__SIZEOF_POINTER__]
-	stp	x23,x24,[sp,#6*__SIZEOF_POINTER__]
+sqr_n_mul_mont_pasta:
+	stp	c29,c30,[csp,#-10*__SIZEOF_POINTER__]!
+	add	c29,csp,#0
+	stp	c19,c20,[csp,#2*__SIZEOF_POINTER__]
+	stp	c21,c22,[csp,#4*__SIZEOF_POINTER__]
+	stp	c23,c24,[csp,#6*__SIZEOF_POINTER__]
 	//stp	c25,c26,[csp,#8*__SIZEOF_POINTER__]
 
-	ldp	x6,x7,[x1]
-	ldp	x8,x9,[x1,#16]
+	ldp	x6,x7,[c1]
+	ldp	x8,x9,[c1,#16]
 
-	ldp	x23,x24,[x4]
+	ldp	x23,x24,[c4]
 	//ldp	x25,x26,[x4,#16]
 
-Loop_sqr_pasta:
+.Loop_sqr_pasta:
 	sub	x2,x2,#1
 
 	////////////////////////////////////////////////////////////////
@@ -629,9 +629,9 @@ Loop_sqr_pasta:
 	adcs	x8,x12,x16
 	adc	x9,x13,x17
 
-	cbnz	x2,Loop_sqr_pasta
+	cbnz	x2,.Loop_sqr_pasta
 
-	ldr	x1,[x3]		// b[0]
+	ldr	x1,[c3]		// b[0]
 
 	mul	x10,x6,x1
 	mul	x11,x7,x1
@@ -651,7 +651,7 @@ Loop_sqr_pasta:
 	//mul	x21,x25,x4	//x25==0
 	adc	x14,xzr,    x22
 	lsl	x22,x4,#62		//mul	x22,x26,x4
-	ldr	x1,[x3,8*1]	// b[1]
+	ldr	x1,[c3,8*1]	// b[1]
 	subs	xzr,x10,#1		//adds	x10,x10,x19
 	umulh	x19,x23,x4
 	adcs	x11,x11,x20
@@ -691,7 +691,7 @@ Loop_sqr_pasta:
 	//mul	x21,x25,x4	//x25==0
 	adc	x14,x14,x22
 	lsl	x22,x4,#62		//mul	x22,x26,x4
-	ldr	x1,[x3,8*2]	// b[2]
+	ldr	x1,[c3,8*2]	// b[2]
 	subs	xzr,x10,#1		//adds	x10,x10,x19
 	umulh	x19,x23,x4
 	adcs	x11,x11,x20
@@ -731,7 +731,7 @@ Loop_sqr_pasta:
 	//mul	x21,x25,x4	//x25==0
 	adc	x14,x14,x22
 	lsl	x22,x4,#62		//mul	x22,x26,x4
-	ldr	x1,[x3,8*3]	// b[3]
+	ldr	x1,[c3,8*3]	// b[3]
 	subs	xzr,x10,#1		//adds	x10,x10,x19
 	umulh	x19,x23,x4
 	adcs	x11,x11,x20
@@ -797,13 +797,13 @@ Loop_sqr_pasta:
 	csel	x12,x12,x21,lo
 	csel	x13,x13,x22,lo
 
-	stp	x10,x11,[x0]
-	stp	x12,x13,[x0,#16]
+	stp	x10,x11,[c0]
+	stp	x12,x13,[c0,#16]
 
-	ldp	x19,x20,[x29,#2*__SIZEOF_POINTER__]
-	ldp	x21,x22,[x29,#4*__SIZEOF_POINTER__]
-	ldp	x23,x24,[x29,#6*__SIZEOF_POINTER__]
+	ldp	c19,c20,[c29,#2*__SIZEOF_POINTER__]
+	ldp	c21,c22,[c29,#4*__SIZEOF_POINTER__]
+	ldp	c23,c24,[c29,#6*__SIZEOF_POINTER__]
 	//ldp	c25,c26,[c29,#8*__SIZEOF_POINTER__]
-	ldr	x29,[sp],#10*__SIZEOF_POINTER__
+	ldr	c29,[csp],#10*__SIZEOF_POINTER__
 	ret
-
+.size	sqr_n_mul_mont_pasta,.-sqr_n_mul_mont_pasta
