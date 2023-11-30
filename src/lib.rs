@@ -491,7 +491,8 @@ mod tests {
 
     #[test]
     fn arithmetic() {
-        let mut python = match Command::new("python")
+        let python_cmd = which::which("python3").unwrap_or("python".into());
+        let mut python = match Command::new(python_cmd)
             .arg("-")
             .stdin(Stdio::piped())
             .spawn()
