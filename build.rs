@@ -32,6 +32,7 @@ fn main() {
 
     let c_src_dir = PathBuf::from("src");
     let mut files = vec![c_src_dir.join("pasta.c")];
+    files.push(c_src_dir.join("pasta_vdf.c"));
     assembly(&mut files, &c_src_dir, &target_arch);
 
     match (cfg!(feature = "portable"), cfg!(feature = "force-adx")) {

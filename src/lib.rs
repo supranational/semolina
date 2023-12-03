@@ -103,6 +103,38 @@ extern "C" {
         p: *const Pasta,
         p0: u64,
     );
+    pub fn minroot_pallas(
+        xy_out: *mut [u8; 64],
+        xy_inp: *const [u8; 64],
+        D: usize,
+    );
+    pub fn minroot_verify_pallas(
+        xy_out: *const [u8; 64],
+        xy_inp: *const [u8; 64],
+        D: usize,
+    ) -> bool;
+    pub fn minroot_partial_verify_pallas(
+        xy_out: *const [u8; 64],
+        xy_inp: *const [u8; 64],
+        D: usize,
+        E: usize,
+    ) -> bool;
+    pub fn minroot_vesta(
+        xy_out: *mut [u8; 64],
+        xy_inp: *const [u8; 64],
+        D: usize,
+    );
+    pub fn minroot_verify_vesta(
+        xy_out: *const [u8; 64],
+        xy_inp: *const [u8; 64],
+        D: usize,
+    ) -> bool;
+    pub fn minroot_partial_verify_vesta(
+        xy_out: *const [u8; 64],
+        xy_inp: *const [u8; 64],
+        D: usize,
+        E: usize,
+    ) -> bool;
 }
 
 macro_rules! pasta_impl {
@@ -608,5 +640,22 @@ mod tests {
 
         let status = python.wait().expect("disaster");
         assert!(status.success());
+    }
+
+    #[test]
+    fn minroot() {
+        const N: usize = 100;
+        let mut rng = ChaCha20Rng::from_entropy();
+        let mut xy_inp = [0u8; 64];
+        let mut xy_out = [0u8; 64];
+        for _ in 0..1_000 {
+            rng.fill_bytes(&mut xy_inp);
+
+            unsafe { minroot_pallas(&mut xy_out, &xy_inp, N) };
+            assert!(unsafe { minroot_verify_pallas(&xy_out, &xy_inp, N) });
+
+            unsafe { minroot_vesta(&mut xy_out, &xy_inp, N) };
+            assert!(unsafe { minroot_verify_vesta(&xy_out, &xy_inp, N) });
+        }
     }
 }

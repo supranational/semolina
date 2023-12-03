@@ -1,6 +1,6 @@
 # Semolina
 
-Even though [Pasta Curves](https://electriccoin.co/blog/the-pasta-curves-for-halo-2-and-beyond/) name's etymology is astronomical, it sounds too gastronomical to see past it. Hence the name, [Semolina](https://en.wikipedia.org/wiki/Semolina), the main ingridient in making pasta. The library is a collection of low-level x86_64 and aarch64 primitives optimized for Pasta moduli. It currently provides basic arithmetic, conversion, exponentiation helper and modular inversion subroutines. `cargo test` exercises these against Python. No benchmarks are provided here, because it's argued that it makes more sense to benchmark higher level implementations.
+Even though [Pasta Curves](https://electriccoin.co/blog/the-pasta-curves-for-halo-2-and-beyond/) name's etymology is astronomical, it sounds too gastronomical to see past it. Hence the name, [Semolina](https://en.wikipedia.org/wiki/Semolina), the main ingridient in making pasta. The library is a collection of low-level x86_64 and aarch64 primitives optimized for Pasta moduli. It currently provides basic arithmetic, conversion, exponentiation helper, modular inversion subroutines, as well as MinRoot VDF primitives. `cargo test` exercises arithmetic operations against Python. No benchmarks are provided here, because it's argued that it makes more sense to benchmark higher level implementations.
 
 ### Technical ranting[s]
 
