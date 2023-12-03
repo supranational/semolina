@@ -1,6 +1,7 @@
 .text
 
 .globl	ct_inverse_pasta
+
 .def	ct_inverse_pasta;
 .type	32;
 .endef

@@ -1,6 +1,7 @@
 .text	
 
 .globl	_ct_inverse_pasta
+.private_extern	_ct_inverse_pasta
 
 .p2align	5
 _ct_inverse_pasta:

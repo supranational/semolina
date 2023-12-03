@@ -1,6 +1,7 @@
 .text
 
 .globl	ct_inverse_pasta
+.hidden	ct_inverse_pasta
 .type	ct_inverse_pasta, %function
 .align	5
 ct_inverse_pasta:
