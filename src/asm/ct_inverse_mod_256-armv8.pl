@@ -1,8 +1,9 @@
 #!/usr/bin/env perl
 #
 # Copyright Supranational LLC
-# Licensed under the Apache License, Version 2.0, see LICENSE for details.
-# SPDX-License-Identifier: Apache-2.0
+# Licensed under the Apache License, Version 2.0 or the MIT license,
+# at your option, see LICENSE-APACHE and LICENSE-MIT for details.
+# SPDX-License-Identifier: MIT OR Apache-2.0
 #
 # Both constant-time and fast Euclidean inversion as suggested in
 # https://eprint.iacr.org/2020/972. ~4.600 cycles on Apple M1, ~8.900 -
