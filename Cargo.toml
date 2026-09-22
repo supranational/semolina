@@ -2,7 +2,7 @@
 name = "semolina"
 version = "0.1.4"
 edition = "2021"
-license = "Apache-2.0"
+license = "MIT OR Apache-2.0"
 description = "Optimized field arithmetic for Pasta moduli for x86-64 and aarch64"
 repository = "https://github.com/supranational/semolina"
 readme = "README.md"
@@ -11,6 +11,8 @@ include = [
     "/Cargo.toml",
     "/build.rs",
     "/README.md",
+    "/LICENSE-APACHE",
+    "/LICENSE-MIT",
 ]
 links = "semolina"
 

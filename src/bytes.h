@@ -1,7 +1,8 @@
 /*
  * Copyright Supranational LLC
- * Licensed under the Apache License, Version 2.0, see LICENSE for details.
- * SPDX-License-Identifier: Apache-2.0
+ * Licensed under the Apache License, Version 2.0 or the MIT license,
+ * at your option, see LICENSE-APACHE and LICENSE-MIT for details.
+ * SPDX-License-Identifier: MIT OR Apache-2.0
  */
 #ifndef __BLS12_381_ASM_BYTES_H__
 #define __BLS12_381_ASM_BYTES_H__
