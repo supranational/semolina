@@ -1,0 +1,70 @@
+name: cargo-test
+
+on:
+  push:
+    branches:
+    - '**'
+  workflow_dispatch:
+    branches:
+    - '**'
+  pull_request:
+    branches:
+    - master
+
+jobs:
+  cargo-test:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, ubuntu-24.04-arm, windows-latest, windows-11-arm, macos-latest ]
+
+    steps:
+    - uses: actions/checkout@v6
+
+    - name: Get date
+      id: get-date
+      run: echo "date=$(date -u +%Y-%m)" >> $GITHUB_OUTPUT
+      shell: bash
+
+    - uses: actions/cache@v5
+      with:
+        path: |
+          ~/.cargo/registry
+          **/Cargo.lock
+          **/bindings/rust/target
+        key: ${{ runner.os }}-${{ runner.arch }}-cargo-${{ steps.get-date.outputs.date }}
+
+    - name: Environment
+      shell: bash
+      run: |
+        lscpu 2>/dev/null && echo --- || true
+        sysctl hw 2>/dev/null && echo --- || true
+        env | sort
+
+    - name: Rust
+      shell: bash
+      run: |
+        rustc --version --verbose
+        export CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse
+        cargo test --release
+        if [ $RUNNER_OS = "macOS" ]; then
+            echo '--- build aarch64-apple-ios'
+            echo
+            rustup target add aarch64-apple-ios
+            env IPHONEOS_DEPLOYMENT_TARGET=10.0 \
+                cargo build --release --target=aarch64-apple-ios
+            cargo clean -p semolina --release --target=aarch64-apple-ios
+        fi
+        echo
+        echo '--- cargo clippy'
+        echo
+        cargo clippy --release
+        cargo clean -p semolina
+        cargo clean -p semolina --release
+        rm -rf target/.rustc_info.json
+        rm -rf target/package
+        rm -rf target/{debug,release}/incremental
+        rm -rf target/*/{debug,release}/incremental
+        rm -rf ~/.cargo/registry/src
+        rm -rf ~/.cargo/registry/index/*/.cache
