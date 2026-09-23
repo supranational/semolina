@@ -517,7 +517,7 @@ pasta_impl!(Vesta, VESTA_P, 0x8c46eb20ffffffffu64,);
 #[cfg(test)]
 mod tests {
     use super::*;
-    use rand::{RngCore, SeedableRng};
+    use rand_core::{RngCore, SeedableRng};
     use rand_chacha::ChaCha20Rng;
     use std::io::prelude::*;
     use std::process::{Command, Stdio};
