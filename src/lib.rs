@@ -65,6 +65,14 @@ extern "C" {
         p: *const Pasta,
         p0: u64,
     );
+    fn pasta_sqr_n_mul(
+        out: *mut Pasta,
+        a: *const Pasta,
+        n: usize,
+        b: *const Pasta,
+        p: *const Pasta,
+        p0: u64,
+    );
     fn pasta_sqr(out: *mut Pasta, a: *const Pasta, p: *const Pasta, p0: u64);
     fn pasta_from(out: *mut Pasta, a: *const Pasta, p: *const Pasta, p0: u64);
     fn pasta_to(out: *mut Pasta, a: *const Pasta, p: *const Pasta, p0: u64);
@@ -158,13 +166,23 @@ macro_rules! pasta_impl {
             pub fn pow(&self, p: Scalar) -> Self {
                 let mut pow_bits = p.num_bits() - 1;
                 let mut out = *self;
+                let mut n = 0usize;
                 while pow_bits != 0 {
                     pow_bits -= 1;
-                    unsafe { pasta_sqr(&mut out.0, &out.0, &$mod, $m0) };
+                    n += 1;
                     if p.is_bit_set(pow_bits) {
                         unsafe {
-                            pasta_mul(&mut out.0, &out.0, &self.0, &$mod, $m0)
+                            pasta_sqr_n_mul(
+                                &mut out.0, &out.0, n, &self.0, &$mod, $m0,
+                            )
                         };
+                        n = 0;
+                    }
+                }
+                while n != 0 {
+                    n -= 1;
+                    unsafe {
+                        pasta_sqr(&mut out.0, &out.0, &$mod, $m0);
                     }
                 }
                 out
