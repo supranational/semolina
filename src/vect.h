@@ -63,6 +63,7 @@ typedef limb_t bool_t;
 # define sqr_mont_pasta sqrx_mont_pasta
 # define from_mont_pasta fromx_mont_pasta
 # define redc_mont_pasta redcx_mont_pasta
+# define sqr_n_mul_mont_pasta sqrx_n_mul_mont_pasta
 #endif
 
 void mul_mont_pasta(vec256 ret, const vec256 a, const vec256 b,
@@ -79,6 +80,9 @@ void pasta_rshift(vec256 ret, const vec256 a, size_t count, const vec256 p);
 
 void ct_inverse_pasta(vec512 ret, const vec256 inp, const vec256 mod,
                                                     const vec256 modx);
+void sqr_n_mul_mont_pasta(vec256 ret, const vec256 a, size_t n,
+                                      const vec256 b,
+                                      const vec256 p, limb_t p0);
 
 /*
  * C subroutines

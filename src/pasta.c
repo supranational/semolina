@@ -53,6 +53,10 @@ void pasta_mul(vec256 out, const vec256 a, const vec256 b,
 void pasta_sqr(vec256 out, const vec256 a, const vec256 p, limb_t n0)
 {   sqr_mont_pasta(out, a, p, n0);   }
 
+void pasta_sqr_n_mul(vec256 out, const vec256 a, size_t n, const vec256 b,
+                     const vec256 p, limb_t n0)
+{   sqr_n_mul_mont_pasta(out, a, n, b, p, n0);   }
+
 void pasta_from(vec256 out, const vec256 a, const vec256 p, limb_t n0)
 {   from_mont_pasta(out, a, p, n0);   }
 
