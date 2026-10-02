@@ -5,7 +5,7 @@
 
 #![allow(dead_code)]
 
-use core::{fmt, mem::size_of_val, ops};
+use core::{fmt, mem::size_of_val, mem::MaybeUninit, ops};
 
 #[derive(Default, Copy, Clone)]
 #[repr(transparent)]
@@ -158,9 +158,16 @@ macro_rules! pasta_impl {
 
         impl $field {
             pub fn reciprocal(&self) -> Self {
-                let mut out = Self::default();
-                unsafe { pasta_reciprocal(&mut out.0, &self.0, &$mod, $m0) };
-                out
+                let mut out = MaybeUninit::<Self>::uninit();
+                unsafe {
+                    pasta_reciprocal(
+                        out.as_mut_ptr() as *mut _,
+                        &self.0,
+                        &$mod,
+                        $m0,
+                    );
+                    out.assume_init()
+                }
             }
 
             pub fn pow(&self, p: Scalar) -> Self {
@@ -191,30 +198,40 @@ macro_rules! pasta_impl {
 
         impl core::convert::From<Scalar> for $field {
             fn from(s: Scalar) -> Self {
-                let mut out = Self::default();
-                unsafe { pasta_from_scalar(&mut out.0, &s, &$mod, $m0) };
-                out
+                Self::from(&s)
             }
         }
         impl<'a> core::convert::From<&'a Scalar> for $field {
             fn from(s: &'a Scalar) -> Self {
-                let mut out = Self::default();
-                unsafe { pasta_from_scalar(&mut out.0, s, &$mod, $m0) };
-                out
+                let mut out = MaybeUninit::<Self>::uninit();
+                unsafe {
+                    pasta_from_scalar(
+                        out.as_mut_ptr() as *mut _,
+                        s,
+                        &$mod,
+                        $m0,
+                    );
+                    out.assume_init()
+                }
             }
         }
         impl core::convert::From<$field> for Scalar {
             fn from(v: $field) -> Self {
-                let mut out = Self::default();
-                unsafe { pasta_to_scalar(&mut out, &v.0, &$mod, $m0) };
-                out
+                Self::from(&v)
             }
         }
         impl<'a> core::convert::From<&'a $field> for Scalar {
             fn from(v: &'a $field) -> Self {
-                let mut out = Self::default();
-                unsafe { pasta_to_scalar(&mut out, &v.0, &$mod, $m0) };
-                out
+                let mut out = MaybeUninit::<Self>::uninit();
+                unsafe {
+                    pasta_to_scalar(
+                        out.as_mut_ptr() as *mut _,
+                        &v.0,
+                        &$mod,
+                        $m0,
+                    );
+                    out.assume_init()
+                }
             }
         }
 
@@ -222,32 +239,36 @@ macro_rules! pasta_impl {
             type Output = Self;
 
             fn mul(self, other: Self) -> Self {
-                let mut out = Self::default();
-                unsafe { pasta_mul(&mut out.0, &self.0, &other.0, &$mod, $m0) };
-                out
+                &self * &other
             }
         }
         impl<'a> ops::Mul<&'a Self> for $field {
             type Output = Self;
 
             fn mul(self, other: &'a Self) -> Self {
-                let mut out = Self::default();
-                unsafe { pasta_mul(&mut out.0, &self.0, &other.0, &$mod, $m0) };
-                out
+                &self * other
             }
         }
-        impl<'a, 'b> ops::Mul<&'a Self> for &'b $field {
-            type Output = <$field as ops::Mul>::Output;
+        impl<'a, 'b> ops::Mul<&'a $field> for &'b $field {
+            type Output = $field;
 
-            fn mul(self, other: &'a Self) -> Self::Output {
-                let mut out = Self::Output::default();
-                unsafe { pasta_mul(&mut out.0, &self.0, &other.0, &$mod, $m0) };
-                out
+            fn mul(self, other: &'a $field) -> Self::Output {
+                let mut out = MaybeUninit::<Self::Output>::uninit();
+                unsafe {
+                    pasta_mul(
+                        out.as_mut_ptr() as *mut _,
+                        &self.0,
+                        &other.0,
+                        &$mod,
+                        $m0,
+                    );
+                    out.assume_init()
+                }
             }
         }
         impl ops::MulAssign for $field {
             fn mul_assign(&mut self, other: Self) {
-                unsafe { pasta_mul(&mut self.0, &self.0, &other.0, &$mod, $m0) }
+                Self::mul_assign(self, &other)
             }
         }
         impl<'a> ops::MulAssign<&'a Self> for $field {
@@ -260,48 +281,44 @@ macro_rules! pasta_impl {
             type Output = Self;
 
             fn div(self, other: Self) -> Self {
-                let mut out = Self::default();
-                unsafe {
-                    pasta_reciprocal(&mut out.0, &other.0, &$mod, $m0);
-                    pasta_mul(&mut out.0, &out.0, &self.0, &$mod, $m0);
-                };
-                out
+                &self / &other
             }
         }
         impl<'a> ops::Div<&'a Self> for $field {
             type Output = Self;
 
             fn div(self, other: &'a Self) -> Self {
-                let mut out = Self::default();
-                unsafe {
-                    pasta_reciprocal(&mut out.0, &other.0, &$mod, $m0);
-                    pasta_mul(&mut out.0, &out.0, &self.0, &$mod, $m0);
-                };
-                out
+                &self / other
             }
         }
-        impl<'a, 'b> ops::Div<&'a Self> for &'b $field {
-            type Output = <$field as ops::Div>::Output;
+        impl<'a, 'b> ops::Div<&'a $field> for &'b $field {
+            type Output = $field;
 
-            fn div(self, other: &'a Self) -> Self::Output {
-                let mut out = Self::Output::default();
+            fn div(self, other: &'a $field) -> Self::Output {
+                let mut out = MaybeUninit::<Self::Output>::uninit();
                 unsafe {
-                    pasta_reciprocal(&mut out.0, &other.0, &$mod, $m0);
-                    pasta_mul(&mut out.0, &out.0, &self.0, &$mod, $m0);
-                };
-                out
+                    pasta_reciprocal(
+                        out.as_mut_ptr() as *mut _,
+                        &other.0,
+                        &$mod,
+                        $m0,
+                    );
+                    pasta_mul(
+                        out.as_mut_ptr() as *mut _,
+                        out.as_ptr() as *const _,
+                        &self.0,
+                        &$mod,
+                        $m0,
+                    );
+                    out.assume_init()
+                }
             }
         }
         impl ops::Div<$field> for i32 {
             type Output = $field;
 
             fn div(self, other: Self::Output) -> Self::Output {
-                if self != 1 {
-                    panic!("only 1/<$field> is supported");
-                }
-                let mut out = Self::Output::default();
-                unsafe { pasta_reciprocal(&mut out.0, &other.0, &$mod, $m0) };
-                out
+                self / &other
             }
         }
         impl<'a> ops::Div<&'a $field> for i32 {
@@ -311,26 +328,40 @@ macro_rules! pasta_impl {
                 if self != 1 {
                     panic!("only 1/<$field> is supported");
                 }
-                let mut out = Self::Output::default();
-                unsafe { pasta_reciprocal(&mut out.0, &other.0, &$mod, $m0) };
-                out
+                let mut out = MaybeUninit::<Self::Output>::uninit();
+                unsafe {
+                    pasta_reciprocal(
+                        out.as_mut_ptr() as *mut _,
+                        &other.0,
+                        &$mod,
+                        $m0,
+                    );
+                    out.assume_init()
+                }
             }
         }
         impl ops::DivAssign for $field {
             fn div_assign(&mut self, other: Self) {
-                let mut inv = Self::default();
-                unsafe {
-                    pasta_reciprocal(&mut inv.0, &other.0, &$mod, $m0);
-                    pasta_mul(&mut self.0, &self.0, &inv.0, &$mod, $m0);
-                };
+                Self::div_assign(self, &other);
             }
         }
         impl<'a> ops::DivAssign<&'a Self> for $field {
             fn div_assign(&mut self, other: &'a Self) {
-                let mut inv = Self::default();
+                let mut inv = MaybeUninit::<Self>::uninit();
                 unsafe {
-                    pasta_reciprocal(&mut inv.0, &other.0, &$mod, $m0);
-                    pasta_mul(&mut self.0, &self.0, &inv.0, &$mod, $m0);
+                    pasta_reciprocal(
+                        inv.as_mut_ptr() as *mut _,
+                        &other.0,
+                        &$mod,
+                        $m0,
+                    );
+                    pasta_mul(
+                        &mut self.0,
+                        &self.0,
+                        inv.as_ptr() as *const _,
+                        &$mod,
+                        $m0,
+                    );
                 };
             }
         }
@@ -339,32 +370,35 @@ macro_rules! pasta_impl {
             type Output = Self;
 
             fn add(self, other: Self) -> Self {
-                let mut out = Self::default();
-                unsafe { pasta_add(&mut out.0, &self.0, &other.0, &$mod) };
-                out
+                &self + &other
             }
         }
         impl<'a> ops::Add<&'a Self> for $field {
             type Output = Self;
 
             fn add(self, other: &'a Self) -> Self {
-                let mut out = Self::default();
-                unsafe { pasta_add(&mut out.0, &self.0, &other.0, &$mod) };
-                out
+                &self + other
             }
         }
-        impl<'a, 'b> ops::Add<&'a Self> for &'b $field {
-            type Output = <$field as ops::Add>::Output;
+        impl<'a, 'b> ops::Add<&'a $field> for &'b $field {
+            type Output = $field;
 
-            fn add(self, other: &'a Self) -> Self::Output {
-                let mut out = Self::Output::default();
-                unsafe { pasta_add(&mut out.0, &self.0, &other.0, &$mod) };
-                out
+            fn add(self, other: &'a $field) -> Self::Output {
+                let mut out = MaybeUninit::<Self::Output>::uninit();
+                unsafe {
+                    pasta_add(
+                        out.as_mut_ptr() as *mut _,
+                        &self.0,
+                        &other.0,
+                        &$mod,
+                    );
+                    out.assume_init()
+                }
             }
         }
         impl ops::AddAssign for $field {
             fn add_assign(&mut self, other: Self) {
-                unsafe { pasta_add(&mut self.0, &self.0, &other.0, &$mod) }
+                Self::add_assign(self, &other);
             }
         }
         impl<'a> ops::AddAssign<&'a Self> for $field {
@@ -377,7 +411,7 @@ macro_rules! pasta_impl {
                 let mut i = $field([other as u64, 0, 0, 0]);
                 unsafe {
                     pasta_to(&mut i.0, &i.0, &$mod, $m0);
-                    pasta_add(&mut self.0, &self.0, &i.0, &$mod)
+                    pasta_add(&mut self.0, &self.0, &i.0, &$mod);
                 }
             }
         }
@@ -386,32 +420,35 @@ macro_rules! pasta_impl {
             type Output = Self;
 
             fn sub(self, other: Self) -> Self {
-                let mut out = Self::default();
-                unsafe { pasta_sub(&mut out.0, &self.0, &other.0, &$mod) }
-                out
+                &self - &other
             }
         }
         impl<'a> ops::Sub<&'a Self> for $field {
             type Output = Self;
 
             fn sub(self, other: &'a Self) -> Self {
-                let mut out = Self::default();
-                unsafe { pasta_sub(&mut out.0, &self.0, &other.0, &$mod) };
-                out
+                &self - other
             }
         }
-        impl<'a, 'b> ops::Sub<&'a Self> for &'b $field {
-            type Output = <$field as ops::Sub>::Output;
+        impl<'a, 'b> ops::Sub<&'a $field> for &'b $field {
+            type Output = $field;
 
-            fn sub(self, other: &'a Self) -> Self::Output {
-                let mut out = Self::Output::default();
-                unsafe { pasta_sub(&mut out.0, &self.0, &other.0, &$mod) };
-                out
+            fn sub(self, other: &'a $field) -> Self::Output {
+                let mut out = MaybeUninit::<Self::Output>::uninit();
+                unsafe {
+                    pasta_sub(
+                        out.as_mut_ptr() as *mut _,
+                        &self.0,
+                        &other.0,
+                        &$mod,
+                    );
+                    out.assume_init()
+                }
             }
         }
         impl ops::SubAssign for $field {
             fn sub_assign(&mut self, other: Self) {
-                unsafe { pasta_sub(&mut self.0, &self.0, &other.0, &$mod) }
+                Self::sub_assign(self, &other);
             }
         }
         impl<'a> ops::SubAssign<&'a Self> for $field {
@@ -424,18 +461,23 @@ macro_rules! pasta_impl {
             type Output = Self;
 
             fn shl(self, count: usize) -> Self {
-                let mut out = Self::default();
-                unsafe { pasta_lshift(&mut out.0, &self.0, count, &$mod) };
-                out
+                &self << count
             }
         }
         impl<'a> ops::Shl<usize> for &'a $field {
-            type Output = <$field as ops::Shl<usize>>::Output;
+            type Output = $field;
 
             fn shl(self, count: usize) -> Self::Output {
-                let mut out = Self::Output::default();
-                unsafe { pasta_lshift(&mut out.0, &self.0, count, &$mod) };
-                out
+                let mut out = MaybeUninit::<Self::Output>::uninit();
+                unsafe {
+                    pasta_lshift(
+                        out.as_mut_ptr() as *mut _,
+                        &self.0,
+                        count,
+                        &$mod,
+                    );
+                    out.assume_init()
+                }
             }
         }
         impl ops::ShlAssign<usize> for $field {
@@ -448,18 +490,23 @@ macro_rules! pasta_impl {
             type Output = Self;
 
             fn shr(self, count: usize) -> Self {
-                let mut out = Self::default();
-                unsafe { pasta_rshift(&mut out.0, &self.0, count, &$mod) };
-                out
+                &self >> count
             }
         }
         impl<'a> ops::Shr<usize> for &'a $field {
-            type Output = <$field as ops::Shr<usize>>::Output;
+            type Output = $field;
 
             fn shr(self, count: usize) -> Self::Output {
-                let mut out = Self::Output::default();
-                unsafe { pasta_rshift(&mut out.0, &self.0, count, &$mod) };
-                out
+                let mut out = MaybeUninit::<Self::Output>::uninit();
+                unsafe {
+                    pasta_rshift(
+                        out.as_mut_ptr() as *mut _,
+                        &self.0,
+                        count,
+                        &$mod,
+                    );
+                    out.assume_init()
+                }
             }
         }
         impl ops::ShrAssign<usize> for $field {
@@ -472,27 +519,37 @@ macro_rules! pasta_impl {
             type Output = Self;
 
             fn neg(self) -> Self {
-                let mut out = Self::default();
-                unsafe { pasta_cneg(&mut out.0, &self.0, true, &$mod) };
-                out
+                -&self
             }
         }
         impl<'a> ops::Neg for &'a $field {
-            type Output = <$field as ops::Neg>::Output;
+            type Output = $field;
 
             fn neg(self) -> Self::Output {
-                let mut out = Self::Output::default();
-                unsafe { pasta_cneg(&mut out.0, &self.0, true, &$mod) };
-                out
+                let mut out = MaybeUninit::<Self::Output>::uninit();
+                unsafe {
+                    pasta_cneg(
+                        out.as_mut_ptr() as *mut _,
+                        &self.0,
+                        true,
+                        &$mod,
+                    );
+                    out.assume_init()
+                }
             }
         }
 
         impl fmt::Debug for $field {
             fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                let mut tmp = Scalar::default();
+                let mut tmp = MaybeUninit::<Scalar>::uninit();
                 write!(f, "{:?}", unsafe {
-                    pasta_to_scalar(&mut tmp, &self.0, &$mod, $m0);
-                    tmp
+                    pasta_to_scalar(
+                        tmp.as_mut_ptr() as *mut _,
+                        &self.0,
+                        &$mod,
+                        $m0,
+                    );
+                    tmp.assume_init()
                 })
             }
         }
@@ -535,8 +592,8 @@ pasta_impl!(Vesta, VESTA_P, 0x8c46eb20ffffffffu64,);
 #[cfg(test)]
 mod tests {
     use super::*;
-    use rand_core::{RngCore, SeedableRng};
     use rand_chacha::ChaCha20Rng;
+    use rand_core::{RngCore, SeedableRng};
     use std::io::prelude::*;
     use std::process::{Command, Stdio};
 
