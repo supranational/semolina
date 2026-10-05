@@ -1,24 +1,30 @@
 use std::env;
+use std::ffi::OsStr;
 use std::path::{Path, PathBuf};
 
-#[cfg(target_env = "msvc")]
-fn assembly(file_vec: &mut Vec<PathBuf>, base_dir: &Path, arch: &String) {
-    let sfx = match arch.as_str() {
-        "x86_64" => "x86_64",
-        "aarch64" => "armv8",
-        _ => "unknown",
-    };
-    let files =
-        glob::glob(&format!("{}/win64/*-{}.asm", base_dir.display(), sfx))
-            .expect("unable to collect assembly files");
-    for file in files {
-        file_vec.push(file.unwrap());
+fn assembly(
+    file_vec: &mut Vec<PathBuf>,
+    base_dir: &Path,
+    _arch: &str,
+    _is_msvc: bool,
+) {
+    #[cfg(target_env = "msvc")]
+    if _is_msvc {
+        let sfx = match _arch {
+            "x86_64" => "x86_64",
+            "aarch64" => "armv8",
+            _ => "unknown",
+        };
+        let files =
+            glob::glob(&format!("{}/win64/*-{}.asm", base_dir.display(), sfx))
+                .expect("unable to collect assembly files");
+        for file in files {
+            file_vec.push(file.unwrap());
+        }
+        return;
     }
-}
 
-#[cfg(not(target_env = "msvc"))]
-fn assembly(file_vec: &mut Vec<PathBuf>, base_dir: &Path, _: &String) {
-    file_vec.push(base_dir.join("assembly.S"))
+    file_vec.push(base_dir.join("assembly.S"));
 }
 
 fn main() {
@@ -33,7 +39,14 @@ fn main() {
     let c_src_dir = PathBuf::from("src");
     let mut files = vec![c_src_dir.join("pasta.c")];
     files.push(c_src_dir.join("pasta_vdf.c"));
-    assembly(&mut files, &c_src_dir, &target_arch);
+    assembly(
+        &mut files,
+        &c_src_dir,
+        &target_arch,
+        cc.get_compiler().is_like_msvc(),
+    );
+
+    let mut adx = false;
 
     match (cfg!(feature = "portable"), cfg!(feature = "force-adx")) {
         (true, false) => {
@@ -44,6 +57,7 @@ fn main() {
             if target_arch.eq("x86_64") {
                 println!("Enabling ADX support via `force-adx` feature");
                 cc.define("__ADX__", None);
+                adx = true;
             } else {
                 println!("`force-adx` is ignored for non-x86_64 targets");
             }
@@ -64,6 +78,7 @@ fn main() {
                             "Enabling ADX because it was set as target-feature"
                         );
                         cc.define("__ADX__", None);
+                        adx = true;
                     }
                 } else {
                     #[cfg(target_arch = "x86_64")]
@@ -72,6 +87,7 @@ fn main() {
                             "Enabling ADX because it was detected on the host"
                         );
                         cc.define("__ADX__", None);
+                        adx = true;
                     }
                 }
             }
@@ -79,6 +95,16 @@ fn main() {
         (true, true) => panic!(
             "Cannot compile with both `portable` and `force-adx` features"
         ),
+    }
+
+    if cc.get_compiler().is_like_msvc() {
+        if adx {
+            let mulq_asm = Some(OsStr::new("pasta_mulq-x86_64.asm"));
+            files.retain(|file| file.file_name() != mulq_asm);
+        } else if target_arch.eq("x86_64") {
+            let mulx_asm = Some(OsStr::new("pasta_mulx-x86_64.asm"));
+            files.retain(|file| file.file_name() != mulx_asm);
+        }
     }
 
     cc.flag_if_supported("-mno-avx") // avoid costly transitions
