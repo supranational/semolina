@@ -263,6 +263,14 @@ my $csetm = sub {
 
 ################################################################
 # CHERI-specific synthetic instructions
+my $alignd = sub {
+    my ($args,$comment) = split(m|\s*//|,shift);
+    $args =~ s/\b(?:x([0-9]+)|(sp))\b/c$1$2/g;
+    my @regs = split(m|,\s*|,$args);
+
+    "\talignd\t".join(',',@regs);
+};
+
 my $scvalue = sub {
     my ($args,$comment) = split(m|\s*//|,shift);
     $args =~ s/\b(?:x([0-9]+)|(sp))\b/c$1$2/g;
@@ -270,6 +278,15 @@ my $scvalue = sub {
     @regs[2] =~ s/\bc([0-9])\b/x$1/;
 
     "\tscvalue\t".join(',',@regs);
+};
+
+my $scbnds = sub {
+    my ($args,$comment) = split(m|\s*//|,shift);
+    $args =~ s/\b(?:x([0-9]+)|(sp))\b/c$1$2/g;
+    my @regs = split(m|,\s*|,$args);
+    @regs[2] =~ s/\bc([0-9])\b/x$1/;
+
+    "\tscbnds\t".join(',',@regs);
 };
 
 my $cadd = sub {
@@ -323,13 +340,13 @@ my $adrp = sub {
 } if ($flavour =~ /ios64/);
 
 my $paciasp = sub {
-    ($flavour =~ /linux|cheri/) ? "\t.inst\t0xd503233f"
-                                : &$inst(0xd503233f);
+    ($flavour =~ /linux|cheri/) ? "\thint\t#PACI_HINT"
+                                : "\thint\t#25";
 };
 
 my $autiasp = sub {
-    ($flavour =~ /linux|cheri/) ? "\t.inst\t0xd50323bf"
-                                : &$inst(0xd50323bf);
+    ($flavour =~ /linux|cheri/) ? "\thint\t#AUTI_HINT"
+                                : "\thint\t#29";
 };
 
 sub range {
@@ -393,6 +410,17 @@ if ($flavour =~ /win(32|64)/) {
     print<<___;
  GBLA __SIZEOF_POINTER__
 __SIZEOF_POINTER__ SETA $1/8
+___
+} elsif ($flavour =~ /linux|cheri/) {
+    print<<___;
+#if defined(__ARM_FEATURE_PAC_DEFAULT) && __ARM_FEATURE_PAC_DEFAULT==2
+# define PACI_HINT 27
+# define AUTI_HINT 31
+#else
+# define PACI_HINT 25
+# define AUTI_HINT 29
+#endif
+
 ___
 }
 
@@ -467,6 +495,22 @@ while(my $line=<>) {
     print "\n";
 }
 
-print "\tEND\n" if ($flavour =~ /win/);
+if ($flavour =~ /win/) {
+    print "\tEND\n";
+} elsif ($flavour =~ /linux|cheri/) {
+    # -mbranch-protection=standanrd segment, snatched from compiler -S output
+    print <<___;
+
+#if defined(__ARM_FEATURE_BTI_DEFAULT) || defined(__ARM_FEATURE_PAC_DEFAULT)
+.section	.note.GNU-stack,"",\@progbits
+.section	.note.gnu.property,"a",\@note
+	.long	4,2f-1f,5
+	.byte	0x47,0x4E,0x55,0
+1:	.long	0xc0000000,4,3
+.align  3
+2:
+#endif
+___
+}
 
 close STDOUT;
