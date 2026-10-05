@@ -200,7 +200,7 @@ mul_mont_pasta:
 .endef
 .p2align	5
 sqr_mont_pasta:
-.long	3573752639
+	hint	#25
 	stp	x29,x30,[sp,#-6*__SIZEOF_POINTER__]!
 	add	x29,sp,#0
 	stp	x19,x20,[sp,#2*__SIZEOF_POINTER__]
@@ -301,7 +301,7 @@ sqr_mont_pasta:
 	ldp	x19,x20,[x29,#2*__SIZEOF_POINTER__]
 	ldp	x21,x22,[x29,#4*__SIZEOF_POINTER__]
 	ldr	x29,[sp],#6*__SIZEOF_POINTER__
-.long	3573752767
+	hint	#29
 	ret
 
 .globl	from_mont_pasta
@@ -311,7 +311,7 @@ sqr_mont_pasta:
 .endef
 .p2align	5
 from_mont_pasta:
-.long	3573752639
+	hint	#25
 	stp	x29,x30,[sp,#-2*__SIZEOF_POINTER__]!
 	add	x29,sp,#0
 
@@ -336,7 +336,7 @@ from_mont_pasta:
 	stp	x12,x13,[x0,#16]
 
 	ldr	x29,[sp],#2*__SIZEOF_POINTER__
-.long	3573752767
+	hint	#29
 	ret
 
 
@@ -347,7 +347,7 @@ from_mont_pasta:
 .endef
 .p2align	5
 redc_mont_pasta:
-.long	3573752639
+	hint	#25
 	stp	x29,x30,[sp,#-2*__SIZEOF_POINTER__]!
 	add	x29,sp,#0
 
@@ -382,7 +382,7 @@ redc_mont_pasta:
 	stp	x12,x13,[x0,#16]
 
 	ldr	x29,[sp],#2*__SIZEOF_POINTER__
-.long	3573752767
+	hint	#29
 	ret
 
 
