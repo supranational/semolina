@@ -23,7 +23,7 @@ def ct_inverse_mod_256(inp, mod):
     for i in range(0, 512 // k - 1):
         # __ab_approximation_31
         n = max(a.bit_length(), b.bit_length())
-        if n < 128:
+        if n < 64:
             a_, b_ = a, b
         else:
             a_ = (a & mask) | ((a >> (n-k-2)) << k)
@@ -62,10 +62,12 @@ def ct_inverse_mod_256(inp, mod):
     mod <<= 512 - mod.bit_length()  # align to the left
     if v < 0:
         v += mod
-    elif v == 1<<512
+    if v < 0:
+        v += mod
+    elif v == 1<<512:
         v -= mod
 
-    return v    # to be reduced % mod
+    return v & (2**512 - 1) # to be reduced % mod
 ___
 
 $flavour = shift;
@@ -100,21 +102,24 @@ $code.=<<___;
 .align	5
 ct_inverse_pasta:
 	paciasp
-	stp	c29, c30, [sp,#-10*__SIZEOF_POINTER__]!
+	stp	c29, c30, [csp,#-10*__SIZEOF_POINTER__]!
 	add	c29, csp, #0
-	stp	c19, c20, [sp,#2*__SIZEOF_POINTER__]
-	stp	c21, c22, [sp,#4*__SIZEOF_POINTER__]
-	stp	c23, c24, [sp,#6*__SIZEOF_POINTER__]
-	stp	c25, c26, [sp,#8*__SIZEOF_POINTER__]
+	stp	c19, c20, [csp,#2*__SIZEOF_POINTER__]
+	stp	c21, c22, [csp,#4*__SIZEOF_POINTER__]
+	stp	c23, c24, [csp,#6*__SIZEOF_POINTER__]
+	stp	c25, c26, [csp,#8*__SIZEOF_POINTER__]
 	sub	csp, csp, #$frame
 
 	ldp	@acc[0], @acc[1], [$in_ptr,#8*0]
 	ldp	@acc[2], @acc[3], [$in_ptr,#8*2]
 
+#ifdef	__CHERI_PURE_CAPABILITY__
+	cadd	$in_ptr, csp, #16+511
+	alignd	$in_ptr, $in_ptr, #9
+	scbnds	$in_ptr, $in_ptr, #512
+#else
 	add	$in_ptr, sp, #16+511	// find closest 512-byte-aligned spot
 	and	$in_ptr, $in_ptr, #-512	// in the frame...
-#ifdef	__CHERI_PURE_CAPABILITY__
-	scvalue	$in_ptr, csp, $in_ptr
 #endif
 	str	c0, [csp]		// offload out_ptr
 
@@ -131,7 +136,7 @@ ct_inverse_pasta:
 
 	eor	$out_ptr, $in_ptr, #256		// pointer to dst |a|b|u|v|
 #ifdef	__CHERI_PURE_CAPABILITY__
-	scvalue	$out_ptr, csp, $out_ptr
+	scvalue $out_ptr, $in_ptr, $out_ptr
 #endif
 	bl	__smul_256_n_shift_by_31
 	str	$f0,[$out_ptr,#8*8]		// initialize |u| with |f0|
@@ -140,18 +145,18 @@ ct_inverse_pasta:
 	mov	$g0, $g1			// |g1|
 	cadd	$out_ptr, $out_ptr, #8*4	// pointer to dst |b|
 	bl	__smul_256_n_shift_by_31
-	str	$f0, [$out_ptr,#8*9]		// initialize |v| with |f1|
+	str	$f0, [$out_ptr,#8*10]		// initialize |v| with |f1|
 
 	////////////////////////////////////////// second iteration
 	eor	$in_ptr, $in_ptr, #256		// flip-flop src |a|b|u|v|
 #ifdef	__CHERI_PURE_CAPABILITY__
-	scvalue	$in_ptr, csp, $in_ptr
+	scvalue $in_ptr, $out_ptr, $in_ptr
 #endif
 	bl	__ab_approximation_31_256
 
 	eor	$out_ptr, $in_ptr, #256		// pointer to dst |a|b|u|v|
 #ifdef	__CHERI_PURE_CAPABILITY__
-	scvalue	$out_ptr, csp, $out_ptr
+	scvalue $out_ptr, $in_ptr, $out_ptr
 #endif
 	bl	__smul_256_n_shift_by_31
 	mov	$f_, $f0			// corrected |f0|
@@ -163,32 +168,30 @@ ct_inverse_pasta:
 	bl	__smul_256_n_shift_by_31
 
 	ldr	@acc[4], [$in_ptr,#8*8]		// |u|
-	ldr	@acc[5], [$in_ptr,#8*13]	// |v|
+	ldr	@acc[5], [$in_ptr,#8*14]	// |v|
 	madd	@acc[0], $f_, @acc[4], xzr	// |u|*|f0|
 	madd	@acc[0], $g_, @acc[5], @acc[0]	// |v|*|g0|
-	str	@acc[0], [$out_ptr,#8*4]
-	asr	@acc[1], @acc[0], #63		// sign extenstion
-	stp	@acc[1], @acc[1], [$out_ptr,#8*5]
-	stp	@acc[1], @acc[1], [$out_ptr,#8*7]
+	asr	@acc[1], @acc[0], #63		// sign extension
+	stp	@acc[0], @acc[1], [$out_ptr,#8*4]
+	stp	@acc[1], @acc[1], [$out_ptr,#8*6]
 
 	madd	@acc[0], $f0, @acc[4], xzr	// |u|*|f1|
 	madd	@acc[0], $g0, @acc[5], @acc[0]	// |v|*|g1|
-	str	@acc[0], [$out_ptr,#8*9]
-	asr	@acc[1], @acc[0], #63		// sign extenstion
-	stp	@acc[1], @acc[1], [$out_ptr,#8*10]
+	asr	@acc[1], @acc[0], #63		// sign extension
+	stp	@acc[0], @acc[1], [$out_ptr,#8*10]
 	stp	@acc[1], @acc[1], [$out_ptr,#8*12]
 ___
 for($i=2; $i<15; $i++) {
 $code.=<<___;
 	eor	$in_ptr, $in_ptr, #256		// flip-flop src |a|b|u|v|
 #ifdef	__CHERI_PURE_CAPABILITY__
-	scvalue	$in_ptr, csp, $in_ptr
+	scvalue $in_ptr, $out_ptr, $in_ptr
 #endif
 	bl	__ab_approximation_31_256
 
 	eor	$out_ptr, $in_ptr, #256		// pointer to dst |a|b|u|v|
 #ifdef	__CHERI_PURE_CAPABILITY__
-	scvalue	$out_ptr, csp, $out_ptr
+	scvalue $out_ptr, $in_ptr, $out_ptr
 #endif
 	bl	__smul_256_n_shift_by_31
 	mov	$f_, $f0			// corrected |f0|
@@ -201,28 +204,35 @@ $code.=<<___;
 
 	cadd	$out_ptr, $out_ptr, #8*4	// pointer to destination |u|
 	bl	__smul_256x63
+___
+$code.=<<___	if ($i==7);
+	asr	@t[5], @t[5], #63
+	str	@t[5], [$out_ptr,#8*4]
+___
+$code.=<<___	if ($i>7);
 	adc	@t[3], @t[3], @t[4]
 	str	@t[3], [$out_ptr,#8*4]
-
+___
+$code.=<<___;
 	mov	$f_, $f0			// corrected |f1|
 	mov	$g_, $g0			// corrected |g1|
-	cadd	$out_ptr, $out_ptr, #8*5	// pointer to destination |v|
+	cadd	$out_ptr, $out_ptr, #8*6	// pointer to destination |v|
 	bl	__smul_256x63
 ___
 $code.=<<___	if ($i>7);
 	bl	__smul_512x63_tail
 ___
-$code.=<<___	if ($i<=7);
-	adc	@t[3], @t[3], @t[4]
-	stp	@t[3], @t[3], [$out_ptr,#8*4]
-	stp	@t[3], @t[3], [$out_ptr,#8*6]
+$code.=<<___	if ($i==7);
+	asr	@t[5], @t[5], #63		// sign extension
+	stp	@t[5], @t[5], [$out_ptr,#8*4]
+	stp	@t[5], @t[5], [$out_ptr,#8*6]
 ___
 }
 $code.=<<___;
 	////////////////////////////////////////// two[!] last iterations
 	eor	$in_ptr, $in_ptr, #256		// flip-flop src |a|b|u|v|
 #ifdef	__CHERI_PURE_CAPABILITY__
-	scvalue	$in_ptr, csp, $in_ptr
+	scvalue $in_ptr, $out_ptr, $in_ptr
 #endif
 	mov	$cnt, #47			// 31 + 512 % 31
 	//bl	__ab_approximation_62_256	// |a| and |b| are exact,
@@ -298,7 +308,7 @@ ___
 for($j=0; $j<2; $j++) {
 my $f_ = $f_;   $f_ = $g_          if ($j);
 my @acc = @acc; @acc = @acc[4..7]  if ($j);
-my $k = 8*8+8*5*$j;
+my $k = 8*8+8*6*$j;
 $code.=<<___;
 	ldp	@acc[0], @acc[1], [$in_ptr,#8*0+$k]	// load |u| (or |v|)
 	asr	$f1, $f_, #63		// |f_|'s sign as mask (or |g_|'s)
@@ -356,9 +366,9 @@ $code.=<<___;
 .align	5
 __smul_512x63_tail:
 	umulh	@t[5], @acc[3], $f_
-	ldp	@acc[1], @acc[2], [$in_ptr,#8*18]	// load rest of |v|
+	ldr	@acc[1], [$in_ptr,#8*19]	// load rest of |v|
 	adc	@t[7], @t[7], xzr
-	ldr	@acc[3], [$in_ptr,#8*20]
+	ldp	@acc[2], @acc[3], [$in_ptr,#8*20]
 	and	@t[3], @t[3], $f_
 
 	umulh	@acc[7], @acc[7], $g_	// resume |v|*|g1| chain
