@@ -32,11 +32,11 @@ my ($lo,$hi)=("%rbp","%r9");
 $code.=<<___;
 .text
 
-.globl	mulx_mont_pasta
-.hidden	mulx_mont_pasta
-.type	mulx_mont_pasta,\@function,5,"unwind"
+.globl	pasta_mul
+.hidden	pasta_mul
+.type	pasta_mul,\@function,5,"unwind"
 .align	32
-mulx_mont_pasta:
+pasta_mul:
 .cfi_startproc
 	push	%rbp
 .cfi_push	%rbp
@@ -83,13 +83,13 @@ mulx_mont_pasta:
 .cfi_epilogue
 	ret
 .cfi_endproc
-.size	mulx_mont_pasta,.-mulx_mont_pasta
+.size	pasta_mul,.-pasta_mul
 
-.globl	sqrx_mont_pasta
-.hidden	sqrx_mont_pasta
-.type	sqrx_mont_pasta,\@function,4,"unwind"
+.globl	pasta_sqr
+.hidden	pasta_sqr
+.type	pasta_sqr,\@function,4,"unwind"
 .align	32
-sqrx_mont_pasta:
+pasta_sqr:
 .cfi_startproc
 	push	%rbp
 .cfi_push	%rbp
@@ -137,7 +137,7 @@ sqrx_mont_pasta:
 .cfi_epilogue
 	ret
 .cfi_endproc
-.size	sqrx_mont_pasta,.-sqrx_mont_pasta
+.size	pasta_sqr,.-pasta_sqr
 ___
 {
 my @acc=@acc;
@@ -256,11 +256,11 @@ ___
 { my ($n_ptr, $n0)=($b_ptr, $n_ptr);	# arguments are "shifted"
 
 $code.=<<___;
-.globl	fromx_mont_pasta
-.hidden	fromx_mont_pasta
-.type	fromx_mont_pasta,\@function,4,"unwind"
+.globl	pasta_from
+.hidden	pasta_from
+.type	pasta_from,\@function,4,"unwind"
 .align	32
-fromx_mont_pasta:
+pasta_from:
 .cfi_startproc
 	push	%rbp
 .cfi_push	%rbp
@@ -320,13 +320,13 @@ fromx_mont_pasta:
 .cfi_epilogue
 	ret
 .cfi_endproc
-.size	fromx_mont_pasta,.-fromx_mont_pasta
+.size	pasta_from,.-pasta_from
 
-.globl	redcx_mont_pasta
-.hidden	redcx_mont_pasta
-.type	redcx_mont_pasta,\@function,4,"unwind"
+.globl	pasta_redc
+.hidden	pasta_redc
+.type	pasta_redc,\@function,4,"unwind"
 .align	32
-redcx_mont_pasta:
+pasta_redc:
 .cfi_startproc
 	push	%rbp
 .cfi_push	%rbp
@@ -392,7 +392,7 @@ redcx_mont_pasta:
 .cfi_epilogue
 	ret
 .cfi_endproc
-.size	redcx_mont_pasta,.-redcx_mont_pasta
+.size	pasta_redc,.-pasta_redc
 ___
 {
 my @acc=@acc;
@@ -460,11 +460,11 @@ my @a=("%rcx","%rbp","%rdi","%rsi");
 my @acc=map("%r$_",(10..15));
 
 $code.=<<___;
-.globl	sqrx_n_mul_mont_pasta
-.hidden	sqrx_n_mul_mont_pasta
-.type	sqrx_n_mul_mont_pasta,\@function,6,"unwind"
+.globl	pasta_sqr_n_mul
+.hidden	pasta_sqr_n_mul
+.type	pasta_sqr_n_mul,\@function,6,"unwind"
 .align	32
-sqrx_n_mul_mont_pasta:
+pasta_sqr_n_mul:
 .cfi_startproc
 	push	%rbp
 .cfi_push	%rbp
@@ -709,7 +709,7 @@ $code.=<<___;
 .cfi_epilogue
 	ret
 .cfi_endproc
-.size	sqrx_n_mul_mont_pasta,.-sqrx_n_mul_mont_pasta
+.size	pasta_sqr_n_mul,.-pasta_sqr_n_mul
 ___
 }
 

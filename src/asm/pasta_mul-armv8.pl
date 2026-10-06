@@ -31,11 +31,11 @@ $m0=$n_ptr;
 $code.=<<___;
 .text
 
-.globl	mul_mont_pasta
-.hidden	mul_mont_pasta
-.type	mul_mont_pasta,%function
+.globl	pasta_mul
+.hidden	pasta_mul
+.type	pasta_mul,%function
 .align	5
-mul_mont_pasta:
+pasta_mul:
 	stp	c29,c30,[csp,#-8*__SIZEOF_POINTER__]!
 	add	c29,csp,#0
 	stp	c19,c20,[csp,#2*__SIZEOF_POINTER__]
@@ -147,18 +147,18 @@ $code.=<<___;
 	ldp	c23,c24,[c29,#6*__SIZEOF_POINTER__]
 	ldr	c29,[csp],#8*__SIZEOF_POINTER__
 	ret
-.size	mul_mont_pasta,.-mul_mont_pasta
+.size	pasta_mul,.-pasta_mul
 ___
 {
 my @acc = (@a,@acc[0..3]);
 my @a = @mod;
 
 $code.=<<___;
-.globl	sqr_mont_pasta
-.hidden	sqr_mont_pasta
-.type	sqr_mont_pasta,%function
+.globl	pasta_sqr
+.hidden	pasta_sqr
+.type	pasta_sqr,%function
 .align	5
-sqr_mont_pasta:
+pasta_sqr:
 	paciasp
 	stp	c29,c30,[csp,#-6*__SIZEOF_POINTER__]!
 	add	c29,csp,#0
@@ -262,18 +262,18 @@ sqr_mont_pasta:
 	ldr	c29,[csp],#6*__SIZEOF_POINTER__
 	autiasp
 	ret
-.size	sqr_mont_pasta,.-sqr_mont_pasta
+.size	pasta_sqr,.-pasta_sqr
 ___
 }
 {
 my @a = (@a, $bi);
 
 $code.=<<___;
-.globl	from_mont_pasta
-.hidden	from_mont_pasta
-.type	from_mont_pasta,%function
+.globl	pasta_from
+.hidden	pasta_from
+.type	pasta_from,%function
 .align	5
-from_mont_pasta:
+pasta_from:
 	paciasp
 	stp	c29,c30,[csp,#-2*__SIZEOF_POINTER__]!
 	add	c29,csp,#0
@@ -301,13 +301,13 @@ from_mont_pasta:
 	ldr	c29,[csp],#2*__SIZEOF_POINTER__
 	autiasp
 	ret
-.size	from_mont_pasta,.-from_mont_pasta
+.size	pasta_from,.-pasta_from
 
-.globl	redc_mont_pasta
-.hidden	redc_mont_pasta
-.type	redc_mont_pasta,%function
+.globl	pasta_redc
+.hidden	pasta_redc
+.type	pasta_redc,%function
 .align	5
-redc_mont_pasta:
+pasta_redc:
 	paciasp
 	stp	c29,c30,[csp,#-2*__SIZEOF_POINTER__]!
 	add	c29,csp,#0
@@ -345,7 +345,7 @@ redc_mont_pasta:
 	ldr	c29,[csp],#2*__SIZEOF_POINTER__
 	autiasp
 	ret
-.size	redc_mont_pasta,.-redc_mont_pasta
+.size	pasta_redc,.-pasta_redc
 
 .type	__mul_by_1_mont_pasta,%function
 .align	5
@@ -412,11 +412,11 @@ my @mod=map("x$_",(23..26));	# assuming @mod[2]==0 yields ~16%, and
 my ($bi,$m0) = ($a_ptr,$n_ptr);
 
 $code.=<<___;
-.globl	sqr_n_mul_mont_pasta
-.hidden	sqr_n_mul_mont_pasta
-.type	sqr_n_mul_mont_pasta,%function
+.globl	pasta_sqr_n_mul
+.hidden	pasta_sqr_n_mul
+.type	pasta_sqr_n_mul,%function
 .align	5
-sqr_n_mul_mont_pasta:
+pasta_sqr_n_mul:
 	stp	c29,c30,[csp,#-10*__SIZEOF_POINTER__]!
 	add	c29,csp,#0
 	stp	c19,c20,[csp,#2*__SIZEOF_POINTER__]
@@ -636,7 +636,7 @@ $code.=<<___;
 	//ldp	c25,c26,[c29,#8*__SIZEOF_POINTER__]
 	ldr	c29,[csp],#10*__SIZEOF_POINTER__
 	ret
-.size	sqr_n_mul_mont_pasta,.-sqr_n_mul_mont_pasta
+.size	pasta_sqr_n_mul,.-pasta_sqr_n_mul
 ___
 }
 

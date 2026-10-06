@@ -15,7 +15,7 @@ static const vec256 zero = { 0 };
 /* Pallas:0x40000000000000000000000000000000224698fc094cf91b992d30ed00000001 */
 
 static inline void to_pallas(vec256 ret, const vec256 a)
-{   mul_mont_pasta(ret, Pallas_RR, a, Pallas_P, Pallas_p0);   }
+{   pasta_mul(ret, Pallas_RR, a, Pallas_P, Pallas_p0);   }
 
 static inline void add_pallas(vec256 ret, const vec256 a, const vec256 b)
 {   pasta_add(ret, a, b, Pallas_P);   }
@@ -24,22 +24,22 @@ static inline void sub_pallas(vec256 ret, const vec256 a, const vec256 b)
 {   pasta_sub(ret, a, b, Pallas_P);   }
 
 static inline void mul_pallas(vec256 ret, const vec256 a, const vec256 b)
-{   mul_mont_pasta(ret, a, b, Pallas_P, Pallas_p0);   }
+{   pasta_mul(ret, a, b, Pallas_P, Pallas_p0);   }
 
 static inline void sqr_pallas(vec256 ret, const vec256 a)
-{   sqr_mont_pasta(ret, a, Pallas_P, Pallas_p0);   }
+{   pasta_sqr(ret, a, Pallas_P, Pallas_p0);   }
 
 static inline void sqr_n_mul_pallas(vec256 ret, const vec256 a, size_t n,
                                                 const vec256 b)
-{   sqr_n_mul_mont_pasta(ret, a, n, b, Pallas_P, Pallas_p0);   }
+{   pasta_sqr_n_mul(ret, a, n, b, Pallas_P, Pallas_p0);   }
 
 static inline void from_pallas(vec256 ret, const vec256 a)
-{   from_mont_pasta(ret, a, Pallas_P, Pallas_p0);   }
+{   pasta_from(ret, a, Pallas_P, Pallas_p0);   }
 
 /* Vesta:0x40000000000000000000000000000000224698fc0994a8dd8c46eb2100000001 */
 
 static inline void to_vesta(vec256 ret, const vec256 a)
-{   mul_mont_pasta(ret, Vesta_RR, a, Vesta_P, Vesta_p0);   }
+{   pasta_mul(ret, Vesta_RR, a, Vesta_P, Vesta_p0);   }
 
 static inline void add_vesta(vec256 ret, const vec256 a, const vec256 b)
 {   pasta_add(ret, a, b, Vesta_P);   }
@@ -48,17 +48,17 @@ static inline void sub_vesta(vec256 ret, const vec256 a, const vec256 b)
 {   pasta_sub(ret, a, b, Vesta_P);   }
 
 static inline void mul_vesta(vec256 ret, const vec256 a, const vec256 b)
-{   mul_mont_pasta(ret, a, b, Vesta_P, Vesta_p0);   }
+{   pasta_mul(ret, a, b, Vesta_P, Vesta_p0);   }
 
 static inline void sqr_vesta(vec256 ret, const vec256 a)
-{   sqr_mont_pasta(ret, a, Vesta_P, Vesta_p0);   }
+{   pasta_sqr(ret, a, Vesta_P, Vesta_p0);   }
 
 static inline void sqr_n_mul_vesta(vec256 ret, const vec256 a, size_t n,
                                                const vec256 b)
-{   sqr_n_mul_mont_pasta(ret, a, n, b, Vesta_P, Vesta_p0);   }
+{   pasta_sqr_n_mul(ret, a, n, b, Vesta_P, Vesta_p0);   }
 
 static inline void from_vesta(vec256 ret, const vec256 a)
-{   from_mont_pasta(ret, a, Vesta_P, Vesta_p0);   }
+{   pasta_from(ret, a, Vesta_P, Vesta_p0);   }
 
 /*
  * With https://github.com/zcash/pasta/blob/master/addchain_5inv.py as
