@@ -1,10 +1,10 @@
 .text	
 
-.globl	_mulx_mont_pasta
-.private_extern	_mulx_mont_pasta
+.globl	_pasta_mul
+.private_extern	_pasta_mul
 
 .p2align	5
-_mulx_mont_pasta:
+_pasta_mul:
 .cfi_startproc
 	.byte	0xf3,0x0f,0x1e,0xfa
 
@@ -62,11 +62,11 @@ _mulx_mont_pasta:
 .cfi_endproc	
 
 
-.globl	_sqrx_mont_pasta
-.private_extern	_sqrx_mont_pasta
+.globl	_pasta_sqr
+.private_extern	_pasta_sqr
 
 .p2align	5
-_sqrx_mont_pasta:
+_pasta_sqr:
 .cfi_startproc
 	.byte	0xf3,0x0f,0x1e,0xfa
 
@@ -313,11 +313,11 @@ __mulx_mont_pasta:
 	.byte	0xf3,0xc3
 .cfi_endproc
 
-.globl	_fromx_mont_pasta
-.private_extern	_fromx_mont_pasta
+.globl	_pasta_from
+.private_extern	_pasta_from
 
 .p2align	5
-_fromx_mont_pasta:
+_pasta_from:
 .cfi_startproc
 	.byte	0xf3,0x0f,0x1e,0xfa
 
@@ -388,11 +388,11 @@ _fromx_mont_pasta:
 .cfi_endproc	
 
 
-.globl	_redcx_mont_pasta
-.private_extern	_redcx_mont_pasta
+.globl	_pasta_redc
+.private_extern	_pasta_redc
 
 .p2align	5
-_redcx_mont_pasta:
+_pasta_redc:
 .cfi_startproc
 	.byte	0xf3,0x0f,0x1e,0xfa
 
@@ -587,11 +587,11 @@ __mulx_by_1_mont_pasta:
 	.byte	0xf3,0xc3
 .cfi_endproc
 
-.globl	_sqrx_n_mul_mont_pasta
-.private_extern	_sqrx_n_mul_mont_pasta
+.globl	_pasta_sqr_n_mul
+.private_extern	_pasta_sqr_n_mul
 
 .p2align	5
-_sqrx_n_mul_mont_pasta:
+_pasta_sqr_n_mul:
 .cfi_startproc
 	.byte	0xf3,0x0f,0x1e,0xfa
 

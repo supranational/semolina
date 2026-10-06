@@ -4,9 +4,9 @@ __SIZEOF_POINTER__ SETA 64/8
 
 
 
-	EXPORT	|mul_mont_pasta|[FUNC]
+	EXPORT	|pasta_mul|[FUNC]
 	ALIGN	32
-|mul_mont_pasta| PROC
+|pasta_mul| PROC
 	stp	x29,x30,[sp,#-8*__SIZEOF_POINTER__]!
 	add	x29,sp,#0
 	stp	x19,x20,[sp,#2*__SIZEOF_POINTER__]
@@ -195,9 +195,9 @@ __SIZEOF_POINTER__ SETA 64/8
 	ENDP
 
 
-	EXPORT	|sqr_mont_pasta|[FUNC]
+	EXPORT	|pasta_sqr|[FUNC]
 	ALIGN	32
-|sqr_mont_pasta| PROC
+|pasta_sqr| PROC
 	hint	#25
 	stp	x29,x30,[sp,#-6*__SIZEOF_POINTER__]!
 	add	x29,sp,#0
@@ -304,9 +304,9 @@ __SIZEOF_POINTER__ SETA 64/8
 	ENDP
 
 
-	EXPORT	|from_mont_pasta|[FUNC]
+	EXPORT	|pasta_from|[FUNC]
 	ALIGN	32
-|from_mont_pasta| PROC
+|pasta_from| PROC
 	hint	#25
 	stp	x29,x30,[sp,#-2*__SIZEOF_POINTER__]!
 	add	x29,sp,#0
@@ -338,9 +338,9 @@ __SIZEOF_POINTER__ SETA 64/8
 
 
 
-	EXPORT	|redc_mont_pasta|[FUNC]
+	EXPORT	|pasta_redc|[FUNC]
 	ALIGN	32
-|redc_mont_pasta| PROC
+|pasta_redc| PROC
 	hint	#25
 	stp	x29,x30,[sp,#-2*__SIZEOF_POINTER__]!
 	add	x29,sp,#0
@@ -466,9 +466,9 @@ __SIZEOF_POINTER__ SETA 64/8
 	ENDP
 
 
-	EXPORT	|sqr_n_mul_mont_pasta|[FUNC]
+	EXPORT	|pasta_sqr_n_mul|[FUNC]
 	ALIGN	32
-|sqr_n_mul_mont_pasta| PROC
+|pasta_sqr_n_mul| PROC
 	stp	x29,x30,[sp,#-10*__SIZEOF_POINTER__]!
 	add	x29,sp,#0
 	stp	x19,x20,[sp,#2*__SIZEOF_POINTER__]

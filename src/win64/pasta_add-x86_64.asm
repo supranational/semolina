@@ -11,15 +11,14 @@ pasta_add	PROC PUBLIC
 	mov	QWORD PTR[16+rsp],rsi
 	mov	r11,rsp
 $L$SEH_begin_pasta_add::
-	mov	rdi,rcx
-	mov	rsi,rdx
-	mov	rdx,r8
-	mov	rcx,r9
-
 
 
 	push	rbp
 
+	mov	rdi,rcx
+	mov	rsi,rdx
+	mov	rdx,r8
+	mov	rcx,r9
 	push	rbx
 
 	sub	rsp,8
@@ -84,15 +83,14 @@ pasta_cneg	PROC PUBLIC
 	mov	QWORD PTR[16+rsp],rsi
 	mov	r11,rsp
 $L$SEH_begin_pasta_cneg::
-	mov	rdi,rcx
-	mov	rsi,rdx
-	mov	rdx,r8
-	mov	rcx,r9
-
 
 
 	push	rbp
 
+	mov	rdi,rcx
+	mov	rsi,rdx
+	mov	rdx,r8
+	mov	rcx,r9
 	push	rbx
 
 	push	r12
@@ -164,15 +162,14 @@ pasta_sub	PROC PUBLIC
 	mov	QWORD PTR[16+rsp],rsi
 	mov	r11,rsp
 $L$SEH_begin_pasta_sub::
-	mov	rdi,rcx
-	mov	rsi,rdx
-	mov	rdx,r8
-	mov	rcx,r9
-
 
 
 	push	rbp
 
+	mov	rdi,rcx
+	mov	rsi,rdx
+	mov	rdx,r8
+	mov	rcx,r9
 	push	rbx
 
 	sub	rsp,8
@@ -228,6 +225,7 @@ pasta_sub	ENDP
 ALIGN	32
 __lshift_mod_256	PROC PRIVATE
 	DB	243,15,30,250
+
 	add	r8,r8
 	adc	r9,r9
 	mov	rax,r8
@@ -263,15 +261,14 @@ pasta_lshift	PROC PUBLIC
 	mov	QWORD PTR[16+rsp],rsi
 	mov	r11,rsp
 $L$SEH_begin_pasta_lshift::
-	mov	rdi,rcx
-	mov	rsi,rdx
-	mov	rdx,r8
-	mov	rcx,r9
-
 
 
 	push	rbp
 
+	mov	rdi,rcx
+	mov	rsi,rdx
+	mov	rdx,r8
+	mov	rcx,r9
 	push	rbx
 
 	push	r12
@@ -322,15 +319,14 @@ pasta_rshift	PROC PUBLIC
 	mov	QWORD PTR[16+rsp],rsi
 	mov	r11,rsp
 $L$SEH_begin_pasta_rshift::
-	mov	rdi,rcx
-	mov	rsi,rdx
-	mov	rdx,r8
-	mov	rcx,r9
-
 
 
 	push	rbp
 
+	mov	rdi,rcx
+	mov	rsi,rdx
+	mov	rdx,r8
+	mov	rcx,r9
 	push	rbx
 
 	sub	rsp,8
@@ -471,8 +467,9 @@ $L$SEH_info_pasta_add_prologue::
 DB	1,0,5,00bh
 DB	0,074h,1,0
 DB	0,064h,2,0
-DB	0,003h
+DB	0,0b3h
 DB	0,0
+	DD	0,0
 $L$SEH_info_pasta_add_body::
 DB	1,0,9,0
 DB	000h,034h,001h,000h
@@ -480,7 +477,8 @@ DB	000h,054h,002h,000h
 DB	000h,074h,004h,000h
 DB	000h,064h,005h,000h
 DB	000h,022h
-DB	000h,000h
+DB	000h,000h,000h,000h,000h,000h
+DB	000h,000h,000h,000h
 $L$SEH_info_pasta_add_epilogue::
 DB	1,0,4,0
 DB	000h,074h,001h,000h
@@ -491,8 +489,9 @@ $L$SEH_info_pasta_cneg_prologue::
 DB	1,0,5,00bh
 DB	0,074h,1,0
 DB	0,064h,2,0
-DB	0,003h
+DB	0,0b3h
 DB	0,0
+	DD	0,0
 $L$SEH_info_pasta_cneg_body::
 DB	1,0,11,0
 DB	000h,0c4h,000h,000h
@@ -512,8 +511,9 @@ $L$SEH_info_pasta_sub_prologue::
 DB	1,0,5,00bh
 DB	0,074h,1,0
 DB	0,064h,2,0
-DB	0,003h
+DB	0,0b3h
 DB	0,0
+	DD	0,0
 $L$SEH_info_pasta_sub_body::
 DB	1,0,9,0
 DB	000h,034h,001h,000h
@@ -521,7 +521,8 @@ DB	000h,054h,002h,000h
 DB	000h,074h,004h,000h
 DB	000h,064h,005h,000h
 DB	000h,022h
-DB	000h,000h
+DB	000h,000h,000h,000h,000h,000h
+DB	000h,000h,000h,000h
 $L$SEH_info_pasta_sub_epilogue::
 DB	1,0,4,0
 DB	000h,074h,001h,000h
@@ -532,8 +533,9 @@ $L$SEH_info_pasta_lshift_prologue::
 DB	1,0,5,00bh
 DB	0,074h,1,0
 DB	0,064h,2,0
-DB	0,003h
+DB	0,0b3h
 DB	0,0
+	DD	0,0
 $L$SEH_info_pasta_lshift_body::
 DB	1,0,11,0
 DB	000h,0c4h,000h,000h
@@ -553,8 +555,9 @@ $L$SEH_info_pasta_rshift_prologue::
 DB	1,0,5,00bh
 DB	0,074h,1,0
 DB	0,064h,2,0
-DB	0,003h
+DB	0,0b3h
 DB	0,0
+	DD	0,0
 $L$SEH_info_pasta_rshift_body::
 DB	1,0,9,0
 DB	000h,034h,001h,000h
@@ -562,7 +565,8 @@ DB	000h,054h,002h,000h
 DB	000h,074h,004h,000h
 DB	000h,064h,005h,000h
 DB	000h,022h
-DB	000h,000h
+DB	000h,000h,000h,000h,000h,000h
+DB	000h,000h,000h,000h
 $L$SEH_info_pasta_rshift_epilogue::
 DB	1,0,4,0
 DB	000h,074h,001h,000h

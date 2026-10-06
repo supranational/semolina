@@ -1,10 +1,10 @@
 .text
 
-.globl	_mul_mont_pasta
-.private_extern	_mul_mont_pasta
+.globl	_pasta_mul
+.private_extern	_pasta_mul
 
 .align	5
-_mul_mont_pasta:
+_pasta_mul:
 	stp	x29,x30,[sp,#-8*__SIZEOF_POINTER__]!
 	add	x29,sp,#0
 	stp	x19,x20,[sp,#2*__SIZEOF_POINTER__]
@@ -191,11 +191,11 @@ _mul_mont_pasta:
 	ldr	x29,[sp],#8*__SIZEOF_POINTER__
 	ret
 
-.globl	_sqr_mont_pasta
-.private_extern	_sqr_mont_pasta
+.globl	_pasta_sqr
+.private_extern	_pasta_sqr
 
 .align	5
-_sqr_mont_pasta:
+_pasta_sqr:
 	hint	#25
 	stp	x29,x30,[sp,#-6*__SIZEOF_POINTER__]!
 	add	x29,sp,#0
@@ -300,11 +300,11 @@ _sqr_mont_pasta:
 	hint	#29
 	ret
 
-.globl	_from_mont_pasta
-.private_extern	_from_mont_pasta
+.globl	_pasta_from
+.private_extern	_pasta_from
 
 .align	5
-_from_mont_pasta:
+_pasta_from:
 	hint	#25
 	stp	x29,x30,[sp,#-2*__SIZEOF_POINTER__]!
 	add	x29,sp,#0
@@ -334,11 +334,11 @@ _from_mont_pasta:
 	ret
 
 
-.globl	_redc_mont_pasta
-.private_extern	_redc_mont_pasta
+.globl	_pasta_redc
+.private_extern	_pasta_redc
 
 .align	5
-_redc_mont_pasta:
+_pasta_redc:
 	hint	#25
 	stp	x29,x30,[sp,#-2*__SIZEOF_POINTER__]!
 	add	x29,sp,#0
@@ -462,11 +462,11 @@ __mul_by_1_mont_pasta:
 
 	ret
 
-.globl	_sqr_n_mul_mont_pasta
-.private_extern	_sqr_n_mul_mont_pasta
+.globl	_pasta_sqr_n_mul
+.private_extern	_pasta_sqr_n_mul
 
 .align	5
-_sqr_n_mul_mont_pasta:
+_pasta_sqr_n_mul:
 	stp	x29,x30,[sp,#-10*__SIZEOF_POINTER__]!
 	add	x29,sp,#0
 	stp	x19,x20,[sp,#2*__SIZEOF_POINTER__]

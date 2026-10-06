@@ -1,10 +1,10 @@
 .text	
 
-.globl	mulx_mont_pasta
-.hidden	mulx_mont_pasta
-.type	mulx_mont_pasta,@function
+.globl	pasta_mul
+.hidden	pasta_mul
+.type	pasta_mul,@function
 .align	32
-mulx_mont_pasta:
+pasta_mul:
 .cfi_startproc
 	.byte	0xf3,0x0f,0x1e,0xfa
 
@@ -60,13 +60,13 @@ mulx_mont_pasta:
 
 	.byte	0xf3,0xc3
 .cfi_endproc	
-.size	mulx_mont_pasta,.-mulx_mont_pasta
+.size	pasta_mul,.-pasta_mul
 
-.globl	sqrx_mont_pasta
-.hidden	sqrx_mont_pasta
-.type	sqrx_mont_pasta,@function
+.globl	pasta_sqr
+.hidden	pasta_sqr
+.type	pasta_sqr,@function
 .align	32
-sqrx_mont_pasta:
+pasta_sqr:
 .cfi_startproc
 	.byte	0xf3,0x0f,0x1e,0xfa
 
@@ -123,7 +123,7 @@ sqrx_mont_pasta:
 
 	.byte	0xf3,0xc3
 .cfi_endproc	
-.size	sqrx_mont_pasta,.-sqrx_mont_pasta
+.size	pasta_sqr,.-pasta_sqr
 .type	__mulx_mont_pasta,@function
 .align	32
 __mulx_mont_pasta:
@@ -313,11 +313,11 @@ __mulx_mont_pasta:
 	.byte	0xf3,0xc3
 .cfi_endproc
 .size	__mulx_mont_pasta,.-__mulx_mont_pasta
-.globl	fromx_mont_pasta
-.hidden	fromx_mont_pasta
-.type	fromx_mont_pasta,@function
+.globl	pasta_from
+.hidden	pasta_from
+.type	pasta_from,@function
 .align	32
-fromx_mont_pasta:
+pasta_from:
 .cfi_startproc
 	.byte	0xf3,0x0f,0x1e,0xfa
 
@@ -386,13 +386,13 @@ fromx_mont_pasta:
 
 	.byte	0xf3,0xc3
 .cfi_endproc	
-.size	fromx_mont_pasta,.-fromx_mont_pasta
+.size	pasta_from,.-pasta_from
 
-.globl	redcx_mont_pasta
-.hidden	redcx_mont_pasta
-.type	redcx_mont_pasta,@function
+.globl	pasta_redc
+.hidden	pasta_redc
+.type	pasta_redc,@function
 .align	32
-redcx_mont_pasta:
+pasta_redc:
 .cfi_startproc
 	.byte	0xf3,0x0f,0x1e,0xfa
 
@@ -467,7 +467,7 @@ redcx_mont_pasta:
 
 	.byte	0xf3,0xc3
 .cfi_endproc	
-.size	redcx_mont_pasta,.-redcx_mont_pasta
+.size	pasta_redc,.-pasta_redc
 .type	__mulx_by_1_mont_pasta,@function
 .align	32
 __mulx_by_1_mont_pasta:
@@ -587,11 +587,11 @@ __mulx_by_1_mont_pasta:
 	.byte	0xf3,0xc3
 .cfi_endproc
 .size	__mulx_by_1_mont_pasta,.-__mulx_by_1_mont_pasta
-.globl	sqrx_n_mul_mont_pasta
-.hidden	sqrx_n_mul_mont_pasta
-.type	sqrx_n_mul_mont_pasta,@function
+.globl	pasta_sqr_n_mul
+.hidden	pasta_sqr_n_mul
+.type	pasta_sqr_n_mul,@function
 .align	32
-sqrx_n_mul_mont_pasta:
+pasta_sqr_n_mul:
 .cfi_startproc
 	.byte	0xf3,0x0f,0x1e,0xfa
 
@@ -995,7 +995,7 @@ sqrx_n_mul_mont_pasta:
 
 	.byte	0xf3,0xc3
 .cfi_endproc	
-.size	sqrx_n_mul_mont_pasta,.-sqrx_n_mul_mont_pasta
+.size	pasta_sqr_n_mul,.-pasta_sqr_n_mul
 
 .section	.note.gnu.property,"a",@note
 	.long	4,2f-1f,5

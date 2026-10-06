@@ -627,7 +627,7 @@ _ct_inverse_pasta:
 	movq	40(%r8),%rbp
 .cfi_restore	%rbp
 	leaq	48(%r8),%rsp
-.cfi_adjust_cfa_offset	-1072-8*6
+.cfi_adjust_cfa_offset	-1120
 
 	.byte	0xf3,0xc3
 .cfi_endproc	

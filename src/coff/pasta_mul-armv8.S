@@ -1,12 +1,12 @@
 .text
 
-.globl	mul_mont_pasta
+.globl	pasta_mul
 
-.def	mul_mont_pasta;
+.def	pasta_mul;
 .type	32;
 .endef
 .p2align	5
-mul_mont_pasta:
+pasta_mul:
 	stp	x29,x30,[sp,#-8*__SIZEOF_POINTER__]!
 	add	x29,sp,#0
 	stp	x19,x20,[sp,#2*__SIZEOF_POINTER__]
@@ -193,13 +193,13 @@ mul_mont_pasta:
 	ldr	x29,[sp],#8*__SIZEOF_POINTER__
 	ret
 
-.globl	sqr_mont_pasta
+.globl	pasta_sqr
 
-.def	sqr_mont_pasta;
+.def	pasta_sqr;
 .type	32;
 .endef
 .p2align	5
-sqr_mont_pasta:
+pasta_sqr:
 	hint	#25
 	stp	x29,x30,[sp,#-6*__SIZEOF_POINTER__]!
 	add	x29,sp,#0
@@ -304,13 +304,13 @@ sqr_mont_pasta:
 	hint	#29
 	ret
 
-.globl	from_mont_pasta
+.globl	pasta_from
 
-.def	from_mont_pasta;
+.def	pasta_from;
 .type	32;
 .endef
 .p2align	5
-from_mont_pasta:
+pasta_from:
 	hint	#25
 	stp	x29,x30,[sp,#-2*__SIZEOF_POINTER__]!
 	add	x29,sp,#0
@@ -340,13 +340,13 @@ from_mont_pasta:
 	ret
 
 
-.globl	redc_mont_pasta
+.globl	pasta_redc
 
-.def	redc_mont_pasta;
+.def	pasta_redc;
 .type	32;
 .endef
 .p2align	5
-redc_mont_pasta:
+pasta_redc:
 	hint	#25
 	stp	x29,x30,[sp,#-2*__SIZEOF_POINTER__]!
 	add	x29,sp,#0
@@ -472,13 +472,13 @@ __mul_by_1_mont_pasta:
 
 	ret
 
-.globl	sqr_n_mul_mont_pasta
+.globl	pasta_sqr_n_mul
 
-.def	sqr_n_mul_mont_pasta;
+.def	pasta_sqr_n_mul;
 .type	32;
 .endef
 .p2align	5
-sqr_n_mul_mont_pasta:
+pasta_sqr_n_mul:
 	stp	x29,x30,[sp,#-10*__SIZEOF_POINTER__]!
 	add	x29,sp,#0
 	stp	x19,x20,[sp,#2*__SIZEOF_POINTER__]

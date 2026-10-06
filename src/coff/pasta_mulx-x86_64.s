@@ -1,24 +1,24 @@
 .text	
 
-.globl	mulx_mont_pasta
+.globl	pasta_mul
 
-.def	mulx_mont_pasta;	.scl 2;	.type 32;	.endef
+.def	pasta_mul;	.scl 2;	.type 32;	.endef
 .p2align	5
-mulx_mont_pasta:
+pasta_mul:
 	.byte	0xf3,0x0f,0x1e,0xfa
 	movq	%rdi,8(%rsp)
 	movq	%rsi,16(%rsp)
 	movq	%rsp,%r11
-.LSEH_begin_mulx_mont_pasta:
-	movq	%rcx,%rdi
-	movq	%rdx,%rsi
-	movq	%r8,%rdx
-	movq	%r9,%rcx
-	movq	40(%rsp),%r8
+.LSEH_begin_pasta_mul:
 
 
 	pushq	%rbp
 
+	movq	%rcx,%rdi
+	movq	%rdx,%rsi
+	movq	%r8,%rdx
+	movq	%r9,%rcx
+	movq	48(%rsp),%r8
 	pushq	%rbx
 
 	pushq	%r12
@@ -31,7 +31,7 @@ mulx_mont_pasta:
 
 	subq	$8,%rsp
 
-.LSEH_body_mulx_mont_pasta:
+.LSEH_body_pasta_mul:
 
 
 	movq	%rdx,%rbx
@@ -60,32 +60,32 @@ mulx_mont_pasta:
 
 	leaq	56(%rsp),%rsp
 
-.LSEH_epilogue_mulx_mont_pasta:
+.LSEH_epilogue_pasta_mul:
 	mov	8(%rsp),%rdi
 	mov	16(%rsp),%rsi
 
 	.byte	0xf3,0xc3
 
-.LSEH_end_mulx_mont_pasta:
+.LSEH_end_pasta_mul:
 
-.globl	sqrx_mont_pasta
+.globl	pasta_sqr
 
-.def	sqrx_mont_pasta;	.scl 2;	.type 32;	.endef
+.def	pasta_sqr;	.scl 2;	.type 32;	.endef
 .p2align	5
-sqrx_mont_pasta:
+pasta_sqr:
 	.byte	0xf3,0x0f,0x1e,0xfa
 	movq	%rdi,8(%rsp)
 	movq	%rsi,16(%rsp)
 	movq	%rsp,%r11
-.LSEH_begin_sqrx_mont_pasta:
-	movq	%rcx,%rdi
-	movq	%rdx,%rsi
-	movq	%r8,%rdx
-	movq	%r9,%rcx
+.LSEH_begin_pasta_sqr:
 
 
 	pushq	%rbp
 
+	movq	%rcx,%rdi
+	movq	%rdx,%rsi
+	movq	%r8,%rdx
+	movq	%r9,%rcx
 	pushq	%rbx
 
 	pushq	%r12
@@ -98,7 +98,7 @@ sqrx_mont_pasta:
 
 	subq	$8,%rsp
 
-.LSEH_body_sqrx_mont_pasta:
+.LSEH_body_pasta_sqr:
 
 
 	movq	%rsi,%rbx
@@ -128,13 +128,13 @@ sqrx_mont_pasta:
 
 	leaq	56(%rsp),%rsp
 
-.LSEH_epilogue_sqrx_mont_pasta:
+.LSEH_epilogue_pasta_sqr:
 	mov	8(%rsp),%rdi
 	mov	16(%rsp),%rsi
 
 	.byte	0xf3,0xc3
 
-.LSEH_end_sqrx_mont_pasta:
+.LSEH_end_pasta_sqr:
 .def	__mulx_mont_pasta;	.scl 3;	.type 32;	.endef
 .p2align	5
 __mulx_mont_pasta:
@@ -322,24 +322,24 @@ __mulx_mont_pasta:
 
 	.byte	0xf3,0xc3
 
-.globl	fromx_mont_pasta
+.globl	pasta_from
 
-.def	fromx_mont_pasta;	.scl 2;	.type 32;	.endef
+.def	pasta_from;	.scl 2;	.type 32;	.endef
 .p2align	5
-fromx_mont_pasta:
+pasta_from:
 	.byte	0xf3,0x0f,0x1e,0xfa
 	movq	%rdi,8(%rsp)
 	movq	%rsi,16(%rsp)
 	movq	%rsp,%r11
-.LSEH_begin_fromx_mont_pasta:
-	movq	%rcx,%rdi
-	movq	%rdx,%rsi
-	movq	%r8,%rdx
-	movq	%r9,%rcx
+.LSEH_begin_pasta_from:
 
 
 	pushq	%rbp
 
+	movq	%rcx,%rdi
+	movq	%rdx,%rsi
+	movq	%r8,%rdx
+	movq	%r9,%rcx
 	pushq	%rbx
 
 	pushq	%r12
@@ -352,7 +352,7 @@ fromx_mont_pasta:
 
 	subq	$8,%rsp
 
-.LSEH_body_fromx_mont_pasta:
+.LSEH_body_pasta_from:
 
 
 	movq	%rdx,%rbx
@@ -394,32 +394,32 @@ fromx_mont_pasta:
 
 	leaq	56(%rsp),%rsp
 
-.LSEH_epilogue_fromx_mont_pasta:
+.LSEH_epilogue_pasta_from:
 	mov	8(%rsp),%rdi
 	mov	16(%rsp),%rsi
 
 	.byte	0xf3,0xc3
 
-.LSEH_end_fromx_mont_pasta:
+.LSEH_end_pasta_from:
 
-.globl	redcx_mont_pasta
+.globl	pasta_redc
 
-.def	redcx_mont_pasta;	.scl 2;	.type 32;	.endef
+.def	pasta_redc;	.scl 2;	.type 32;	.endef
 .p2align	5
-redcx_mont_pasta:
+pasta_redc:
 	.byte	0xf3,0x0f,0x1e,0xfa
 	movq	%rdi,8(%rsp)
 	movq	%rsi,16(%rsp)
 	movq	%rsp,%r11
-.LSEH_begin_redcx_mont_pasta:
-	movq	%rcx,%rdi
-	movq	%rdx,%rsi
-	movq	%r8,%rdx
-	movq	%r9,%rcx
+.LSEH_begin_pasta_redc:
 
 
 	pushq	%rbp
 
+	movq	%rcx,%rdi
+	movq	%rdx,%rsi
+	movq	%r8,%rdx
+	movq	%r9,%rcx
 	pushq	%rbx
 
 	pushq	%r12
@@ -432,7 +432,7 @@ redcx_mont_pasta:
 
 	subq	$8,%rsp
 
-.LSEH_body_redcx_mont_pasta:
+.LSEH_body_pasta_redc:
 
 
 	movq	%rdx,%rbx
@@ -480,13 +480,13 @@ redcx_mont_pasta:
 
 	leaq	56(%rsp),%rsp
 
-.LSEH_epilogue_redcx_mont_pasta:
+.LSEH_epilogue_pasta_redc:
 	mov	8(%rsp),%rdi
 	mov	16(%rsp),%rsi
 
 	.byte	0xf3,0xc3
 
-.LSEH_end_redcx_mont_pasta:
+.LSEH_end_pasta_redc:
 .def	__mulx_by_1_mont_pasta;	.scl 3;	.type 32;	.endef
 .p2align	5
 __mulx_by_1_mont_pasta:
@@ -604,26 +604,26 @@ __mulx_by_1_mont_pasta:
 	movq	%rdx,%r11
 	.byte	0xf3,0xc3
 
-.globl	sqrx_n_mul_mont_pasta
+.globl	pasta_sqr_n_mul
 
-.def	sqrx_n_mul_mont_pasta;	.scl 2;	.type 32;	.endef
+.def	pasta_sqr_n_mul;	.scl 2;	.type 32;	.endef
 .p2align	5
-sqrx_n_mul_mont_pasta:
+pasta_sqr_n_mul:
 	.byte	0xf3,0x0f,0x1e,0xfa
 	movq	%rdi,8(%rsp)
 	movq	%rsi,16(%rsp)
 	movq	%rsp,%r11
-.LSEH_begin_sqrx_n_mul_mont_pasta:
-	movq	%rcx,%rdi
-	movq	%rdx,%rsi
-	movq	%r8,%rdx
-	movq	%r9,%rcx
-	movq	40(%rsp),%r8
-	movq	48(%rsp),%r9
+.LSEH_begin_pasta_sqr_n_mul:
 
 
 	pushq	%rbp
 
+	movq	%rcx,%rdi
+	movq	%rdx,%rsi
+	movq	%r8,%rdx
+	movq	%r9,%rcx
+	movq	48(%rsp),%r8
+	movq	56(%rsp),%r9
 	pushq	%rbx
 
 	pushq	%r12
@@ -636,7 +636,7 @@ sqrx_n_mul_mont_pasta:
 
 	subq	$40,%rsp
 
-.LSEH_body_sqrx_n_mul_mont_pasta:
+.LSEH_body_pasta_sqr_n_mul:
 
 	leaq	-128(%rcx),%rcx
 	leaq	-128(%r8),%r8
@@ -1013,84 +1013,85 @@ sqrx_n_mul_mont_pasta:
 
 	leaq	88(%rsp),%rsp
 
-.LSEH_epilogue_sqrx_n_mul_mont_pasta:
+.LSEH_epilogue_pasta_sqr_n_mul:
 	mov	8(%rsp),%rdi
 	mov	16(%rsp),%rsi
 
 	.byte	0xf3,0xc3
 
-.LSEH_end_sqrx_n_mul_mont_pasta:
+.LSEH_end_pasta_sqr_n_mul:
 .section	.pdata
 .p2align	2
-.rva	.LSEH_begin_mulx_mont_pasta
-.rva	.LSEH_body_mulx_mont_pasta
-.rva	.LSEH_info_mulx_mont_pasta_prologue
+.rva	.LSEH_begin_pasta_mul
+.rva	.LSEH_body_pasta_mul
+.rva	.LSEH_info_pasta_mul_prologue
 
-.rva	.LSEH_body_mulx_mont_pasta
-.rva	.LSEH_epilogue_mulx_mont_pasta
-.rva	.LSEH_info_mulx_mont_pasta_body
+.rva	.LSEH_body_pasta_mul
+.rva	.LSEH_epilogue_pasta_mul
+.rva	.LSEH_info_pasta_mul_body
 
-.rva	.LSEH_epilogue_mulx_mont_pasta
-.rva	.LSEH_end_mulx_mont_pasta
-.rva	.LSEH_info_mulx_mont_pasta_epilogue
+.rva	.LSEH_epilogue_pasta_mul
+.rva	.LSEH_end_pasta_mul
+.rva	.LSEH_info_pasta_mul_epilogue
 
-.rva	.LSEH_begin_sqrx_mont_pasta
-.rva	.LSEH_body_sqrx_mont_pasta
-.rva	.LSEH_info_sqrx_mont_pasta_prologue
+.rva	.LSEH_begin_pasta_sqr
+.rva	.LSEH_body_pasta_sqr
+.rva	.LSEH_info_pasta_sqr_prologue
 
-.rva	.LSEH_body_sqrx_mont_pasta
-.rva	.LSEH_epilogue_sqrx_mont_pasta
-.rva	.LSEH_info_sqrx_mont_pasta_body
+.rva	.LSEH_body_pasta_sqr
+.rva	.LSEH_epilogue_pasta_sqr
+.rva	.LSEH_info_pasta_sqr_body
 
-.rva	.LSEH_epilogue_sqrx_mont_pasta
-.rva	.LSEH_end_sqrx_mont_pasta
-.rva	.LSEH_info_sqrx_mont_pasta_epilogue
+.rva	.LSEH_epilogue_pasta_sqr
+.rva	.LSEH_end_pasta_sqr
+.rva	.LSEH_info_pasta_sqr_epilogue
 
-.rva	.LSEH_begin_fromx_mont_pasta
-.rva	.LSEH_body_fromx_mont_pasta
-.rva	.LSEH_info_fromx_mont_pasta_prologue
+.rva	.LSEH_begin_pasta_from
+.rva	.LSEH_body_pasta_from
+.rva	.LSEH_info_pasta_from_prologue
 
-.rva	.LSEH_body_fromx_mont_pasta
-.rva	.LSEH_epilogue_fromx_mont_pasta
-.rva	.LSEH_info_fromx_mont_pasta_body
+.rva	.LSEH_body_pasta_from
+.rva	.LSEH_epilogue_pasta_from
+.rva	.LSEH_info_pasta_from_body
 
-.rva	.LSEH_epilogue_fromx_mont_pasta
-.rva	.LSEH_end_fromx_mont_pasta
-.rva	.LSEH_info_fromx_mont_pasta_epilogue
+.rva	.LSEH_epilogue_pasta_from
+.rva	.LSEH_end_pasta_from
+.rva	.LSEH_info_pasta_from_epilogue
 
-.rva	.LSEH_begin_redcx_mont_pasta
-.rva	.LSEH_body_redcx_mont_pasta
-.rva	.LSEH_info_redcx_mont_pasta_prologue
+.rva	.LSEH_begin_pasta_redc
+.rva	.LSEH_body_pasta_redc
+.rva	.LSEH_info_pasta_redc_prologue
 
-.rva	.LSEH_body_redcx_mont_pasta
-.rva	.LSEH_epilogue_redcx_mont_pasta
-.rva	.LSEH_info_redcx_mont_pasta_body
+.rva	.LSEH_body_pasta_redc
+.rva	.LSEH_epilogue_pasta_redc
+.rva	.LSEH_info_pasta_redc_body
 
-.rva	.LSEH_epilogue_redcx_mont_pasta
-.rva	.LSEH_end_redcx_mont_pasta
-.rva	.LSEH_info_redcx_mont_pasta_epilogue
+.rva	.LSEH_epilogue_pasta_redc
+.rva	.LSEH_end_pasta_redc
+.rva	.LSEH_info_pasta_redc_epilogue
 
-.rva	.LSEH_begin_sqrx_n_mul_mont_pasta
-.rva	.LSEH_body_sqrx_n_mul_mont_pasta
-.rva	.LSEH_info_sqrx_n_mul_mont_pasta_prologue
+.rva	.LSEH_begin_pasta_sqr_n_mul
+.rva	.LSEH_body_pasta_sqr_n_mul
+.rva	.LSEH_info_pasta_sqr_n_mul_prologue
 
-.rva	.LSEH_body_sqrx_n_mul_mont_pasta
-.rva	.LSEH_epilogue_sqrx_n_mul_mont_pasta
-.rva	.LSEH_info_sqrx_n_mul_mont_pasta_body
+.rva	.LSEH_body_pasta_sqr_n_mul
+.rva	.LSEH_epilogue_pasta_sqr_n_mul
+.rva	.LSEH_info_pasta_sqr_n_mul_body
 
-.rva	.LSEH_epilogue_sqrx_n_mul_mont_pasta
-.rva	.LSEH_end_sqrx_n_mul_mont_pasta
-.rva	.LSEH_info_sqrx_n_mul_mont_pasta_epilogue
+.rva	.LSEH_epilogue_pasta_sqr_n_mul
+.rva	.LSEH_end_pasta_sqr_n_mul
+.rva	.LSEH_info_pasta_sqr_n_mul_epilogue
 
 .section	.xdata
 .p2align	3
-.LSEH_info_mulx_mont_pasta_prologue:
+.LSEH_info_pasta_mul_prologue:
 .byte	1,0,5,0x0b
 .byte	0,0x74,1,0
 .byte	0,0x64,2,0
-.byte	0,0x03
+.byte	0,0xb3
 .byte	0,0
-.LSEH_info_mulx_mont_pasta_body:
+.long	0,0
+.LSEH_info_pasta_mul_body:
 .byte	1,0,17,0
 .byte	0x00,0xf4,0x01,0x00
 .byte	0x00,0xe4,0x02,0x00
@@ -1101,20 +1102,22 @@ sqrx_n_mul_mont_pasta:
 .byte	0x00,0x74,0x08,0x00
 .byte	0x00,0x64,0x09,0x00
 .byte	0x00,0x62
-.byte	0x00,0x00
-.LSEH_info_mulx_mont_pasta_epilogue:
+.byte	0x00,0x00,0x00,0x00,0x00,0x00
+.byte	0x00,0x00,0x00,0x00
+.LSEH_info_pasta_mul_epilogue:
 .byte	1,0,4,0
 .byte	0x00,0x74,0x01,0x00
 .byte	0x00,0x64,0x02,0x00
 .byte	0x00,0x00,0x00,0x00
 
-.LSEH_info_sqrx_mont_pasta_prologue:
+.LSEH_info_pasta_sqr_prologue:
 .byte	1,0,5,0x0b
 .byte	0,0x74,1,0
 .byte	0,0x64,2,0
-.byte	0,0x03
+.byte	0,0xb3
 .byte	0,0
-.LSEH_info_sqrx_mont_pasta_body:
+.long	0,0
+.LSEH_info_pasta_sqr_body:
 .byte	1,0,17,0
 .byte	0x00,0xf4,0x01,0x00
 .byte	0x00,0xe4,0x02,0x00
@@ -1125,20 +1128,22 @@ sqrx_n_mul_mont_pasta:
 .byte	0x00,0x74,0x08,0x00
 .byte	0x00,0x64,0x09,0x00
 .byte	0x00,0x62
-.byte	0x00,0x00
-.LSEH_info_sqrx_mont_pasta_epilogue:
+.byte	0x00,0x00,0x00,0x00,0x00,0x00
+.byte	0x00,0x00,0x00,0x00
+.LSEH_info_pasta_sqr_epilogue:
 .byte	1,0,4,0
 .byte	0x00,0x74,0x01,0x00
 .byte	0x00,0x64,0x02,0x00
 .byte	0x00,0x00,0x00,0x00
 
-.LSEH_info_fromx_mont_pasta_prologue:
+.LSEH_info_pasta_from_prologue:
 .byte	1,0,5,0x0b
 .byte	0,0x74,1,0
 .byte	0,0x64,2,0
-.byte	0,0x03
+.byte	0,0xb3
 .byte	0,0
-.LSEH_info_fromx_mont_pasta_body:
+.long	0,0
+.LSEH_info_pasta_from_body:
 .byte	1,0,17,0
 .byte	0x00,0xf4,0x01,0x00
 .byte	0x00,0xe4,0x02,0x00
@@ -1149,20 +1154,22 @@ sqrx_n_mul_mont_pasta:
 .byte	0x00,0x74,0x08,0x00
 .byte	0x00,0x64,0x09,0x00
 .byte	0x00,0x62
-.byte	0x00,0x00
-.LSEH_info_fromx_mont_pasta_epilogue:
+.byte	0x00,0x00,0x00,0x00,0x00,0x00
+.byte	0x00,0x00,0x00,0x00
+.LSEH_info_pasta_from_epilogue:
 .byte	1,0,4,0
 .byte	0x00,0x74,0x01,0x00
 .byte	0x00,0x64,0x02,0x00
 .byte	0x00,0x00,0x00,0x00
 
-.LSEH_info_redcx_mont_pasta_prologue:
+.LSEH_info_pasta_redc_prologue:
 .byte	1,0,5,0x0b
 .byte	0,0x74,1,0
 .byte	0,0x64,2,0
-.byte	0,0x03
+.byte	0,0xb3
 .byte	0,0
-.LSEH_info_redcx_mont_pasta_body:
+.long	0,0
+.LSEH_info_pasta_redc_body:
 .byte	1,0,17,0
 .byte	0x00,0xf4,0x01,0x00
 .byte	0x00,0xe4,0x02,0x00
@@ -1173,20 +1180,22 @@ sqrx_n_mul_mont_pasta:
 .byte	0x00,0x74,0x08,0x00
 .byte	0x00,0x64,0x09,0x00
 .byte	0x00,0x62
-.byte	0x00,0x00
-.LSEH_info_redcx_mont_pasta_epilogue:
+.byte	0x00,0x00,0x00,0x00,0x00,0x00
+.byte	0x00,0x00,0x00,0x00
+.LSEH_info_pasta_redc_epilogue:
 .byte	1,0,4,0
 .byte	0x00,0x74,0x01,0x00
 .byte	0x00,0x64,0x02,0x00
 .byte	0x00,0x00,0x00,0x00
 
-.LSEH_info_sqrx_n_mul_mont_pasta_prologue:
+.LSEH_info_pasta_sqr_n_mul_prologue:
 .byte	1,0,5,0x0b
 .byte	0,0x74,1,0
 .byte	0,0x64,2,0
-.byte	0,0x03
+.byte	0,0xb3
 .byte	0,0
-.LSEH_info_sqrx_n_mul_mont_pasta_body:
+.long	0,0
+.LSEH_info_pasta_sqr_n_mul_body:
 .byte	1,0,17,0
 .byte	0x00,0xf4,0x05,0x00
 .byte	0x00,0xe4,0x06,0x00
@@ -1197,8 +1206,9 @@ sqrx_n_mul_mont_pasta:
 .byte	0x00,0x74,0x0c,0x00
 .byte	0x00,0x64,0x0d,0x00
 .byte	0x00,0xa2
-.byte	0x00,0x00
-.LSEH_info_sqrx_n_mul_mont_pasta_epilogue:
+.byte	0x00,0x00,0x00,0x00,0x00,0x00
+.byte	0x00,0x00,0x00,0x00
+.LSEH_info_pasta_sqr_n_mul_epilogue:
 .byte	1,0,4,0
 .byte	0x00,0x74,0x01,0x00
 .byte	0x00,0x64,0x02,0x00

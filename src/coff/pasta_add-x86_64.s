@@ -10,14 +10,14 @@ pasta_add:
 	movq	%rsi,16(%rsp)
 	movq	%rsp,%r11
 .LSEH_begin_pasta_add:
-	movq	%rcx,%rdi
-	movq	%rdx,%rsi
-	movq	%r8,%rdx
-	movq	%r9,%rcx
 
 
 	pushq	%rbp
 
+	movq	%rcx,%rdi
+	movq	%rdx,%rsi
+	movq	%r8,%rdx
+	movq	%r9,%rcx
 	pushq	%rbx
 
 	subq	$8,%rsp
@@ -81,14 +81,14 @@ pasta_cneg:
 	movq	%rsi,16(%rsp)
 	movq	%rsp,%r11
 .LSEH_begin_pasta_cneg:
-	movq	%rcx,%rdi
-	movq	%rdx,%rsi
-	movq	%r8,%rdx
-	movq	%r9,%rcx
 
 
 	pushq	%rbp
 
+	movq	%rcx,%rdi
+	movq	%rdx,%rsi
+	movq	%r8,%rdx
+	movq	%r9,%rcx
 	pushq	%rbx
 
 	pushq	%r12
@@ -159,14 +159,14 @@ pasta_sub:
 	movq	%rsi,16(%rsp)
 	movq	%rsp,%r11
 .LSEH_begin_pasta_sub:
-	movq	%rcx,%rdi
-	movq	%rdx,%rsi
-	movq	%r8,%rdx
-	movq	%r9,%rcx
 
 
 	pushq	%rbp
 
+	movq	%rcx,%rdi
+	movq	%rdx,%rsi
+	movq	%r8,%rdx
+	movq	%r9,%rcx
 	pushq	%rbx
 
 	subq	$8,%rsp
@@ -257,14 +257,14 @@ pasta_lshift:
 	movq	%rsi,16(%rsp)
 	movq	%rsp,%r11
 .LSEH_begin_pasta_lshift:
-	movq	%rcx,%rdi
-	movq	%rdx,%rsi
-	movq	%r8,%rdx
-	movq	%r9,%rcx
 
 
 	pushq	%rbp
 
+	movq	%rcx,%rdi
+	movq	%rdx,%rsi
+	movq	%r8,%rdx
+	movq	%r9,%rcx
 	pushq	%rbx
 
 	pushq	%r12
@@ -314,14 +314,14 @@ pasta_rshift:
 	movq	%rsi,16(%rsp)
 	movq	%rsp,%r11
 .LSEH_begin_pasta_rshift:
-	movq	%rcx,%rdi
-	movq	%rdx,%rsi
-	movq	%r8,%rdx
-	movq	%r9,%rcx
 
 
 	pushq	%rbp
 
+	movq	%rcx,%rdi
+	movq	%rdx,%rsi
+	movq	%r8,%rdx
+	movq	%r9,%rcx
 	pushq	%rbx
 
 	subq	$8,%rsp
@@ -459,8 +459,9 @@ pasta_rshift:
 .byte	1,0,5,0x0b
 .byte	0,0x74,1,0
 .byte	0,0x64,2,0
-.byte	0,0x03
+.byte	0,0xb3
 .byte	0,0
+.long	0,0
 .LSEH_info_pasta_add_body:
 .byte	1,0,9,0
 .byte	0x00,0x34,0x01,0x00
@@ -468,7 +469,8 @@ pasta_rshift:
 .byte	0x00,0x74,0x04,0x00
 .byte	0x00,0x64,0x05,0x00
 .byte	0x00,0x22
-.byte	0x00,0x00
+.byte	0x00,0x00,0x00,0x00,0x00,0x00
+.byte	0x00,0x00,0x00,0x00
 .LSEH_info_pasta_add_epilogue:
 .byte	1,0,4,0
 .byte	0x00,0x74,0x01,0x00
@@ -479,8 +481,9 @@ pasta_rshift:
 .byte	1,0,5,0x0b
 .byte	0,0x74,1,0
 .byte	0,0x64,2,0
-.byte	0,0x03
+.byte	0,0xb3
 .byte	0,0
+.long	0,0
 .LSEH_info_pasta_cneg_body:
 .byte	1,0,11,0
 .byte	0x00,0xc4,0x00,0x00
@@ -500,8 +503,9 @@ pasta_rshift:
 .byte	1,0,5,0x0b
 .byte	0,0x74,1,0
 .byte	0,0x64,2,0
-.byte	0,0x03
+.byte	0,0xb3
 .byte	0,0
+.long	0,0
 .LSEH_info_pasta_sub_body:
 .byte	1,0,9,0
 .byte	0x00,0x34,0x01,0x00
@@ -509,7 +513,8 @@ pasta_rshift:
 .byte	0x00,0x74,0x04,0x00
 .byte	0x00,0x64,0x05,0x00
 .byte	0x00,0x22
-.byte	0x00,0x00
+.byte	0x00,0x00,0x00,0x00,0x00,0x00
+.byte	0x00,0x00,0x00,0x00
 .LSEH_info_pasta_sub_epilogue:
 .byte	1,0,4,0
 .byte	0x00,0x74,0x01,0x00
@@ -520,8 +525,9 @@ pasta_rshift:
 .byte	1,0,5,0x0b
 .byte	0,0x74,1,0
 .byte	0,0x64,2,0
-.byte	0,0x03
+.byte	0,0xb3
 .byte	0,0
+.long	0,0
 .LSEH_info_pasta_lshift_body:
 .byte	1,0,11,0
 .byte	0x00,0xc4,0x00,0x00
@@ -541,8 +547,9 @@ pasta_rshift:
 .byte	1,0,5,0x0b
 .byte	0,0x74,1,0
 .byte	0,0x64,2,0
-.byte	0,0x03
+.byte	0,0xb3
 .byte	0,0
+.long	0,0
 .LSEH_info_pasta_rshift_body:
 .byte	1,0,9,0
 .byte	0x00,0x34,0x01,0x00
@@ -550,7 +557,8 @@ pasta_rshift:
 .byte	0x00,0x74,0x04,0x00
 .byte	0x00,0x64,0x05,0x00
 .byte	0x00,0x22
-.byte	0x00,0x00
+.byte	0x00,0x00,0x00,0x00,0x00,0x00
+.byte	0x00,0x00,0x00,0x00
 .LSEH_info_pasta_rshift_epilogue:
 .byte	1,0,4,0
 .byte	0x00,0x74,0x01,0x00

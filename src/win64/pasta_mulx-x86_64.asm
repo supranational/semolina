@@ -1,26 +1,25 @@
 OPTION	DOTNAME
 .text$	SEGMENT ALIGN(256) 'CODE'
 
-PUBLIC	mulx_mont_pasta
+PUBLIC	pasta_mul
 
 
 ALIGN	32
-mulx_mont_pasta	PROC PUBLIC
+pasta_mul	PROC PUBLIC
 	DB	243,15,30,250
 	mov	QWORD PTR[8+rsp],rdi	;WIN64 prologue
 	mov	QWORD PTR[16+rsp],rsi
 	mov	r11,rsp
-$L$SEH_begin_mulx_mont_pasta::
-	mov	rdi,rcx
-	mov	rsi,rdx
-	mov	rdx,r8
-	mov	rcx,r9
-	mov	r8,QWORD PTR[40+rsp]
-
+$L$SEH_begin_pasta_mul::
 
 
 	push	rbp
 
+	mov	rdi,rcx
+	mov	rsi,rdx
+	mov	rdx,r8
+	mov	rcx,r9
+	mov	r8,QWORD PTR[48+rsp]
 	push	rbx
 
 	push	r12
@@ -33,7 +32,7 @@ $L$SEH_begin_mulx_mont_pasta::
 
 	sub	rsp,8
 
-$L$SEH_body_mulx_mont_pasta::
+$L$SEH_body_pasta_mul::
 
 
 	mov	rbx,rdx
@@ -62,34 +61,33 @@ $L$SEH_body_mulx_mont_pasta::
 
 	lea	rsp,QWORD PTR[56+rsp]
 
-$L$SEH_epilogue_mulx_mont_pasta::
+$L$SEH_epilogue_pasta_mul::
 	mov	rdi,QWORD PTR[8+rsp]	;WIN64 epilogue
 	mov	rsi,QWORD PTR[16+rsp]
 
 	DB	0F3h,0C3h		;repret
 
-$L$SEH_end_mulx_mont_pasta::
-mulx_mont_pasta	ENDP
+$L$SEH_end_pasta_mul::
+pasta_mul	ENDP
 
-PUBLIC	sqrx_mont_pasta
+PUBLIC	pasta_sqr
 
 
 ALIGN	32
-sqrx_mont_pasta	PROC PUBLIC
+pasta_sqr	PROC PUBLIC
 	DB	243,15,30,250
 	mov	QWORD PTR[8+rsp],rdi	;WIN64 prologue
 	mov	QWORD PTR[16+rsp],rsi
 	mov	r11,rsp
-$L$SEH_begin_sqrx_mont_pasta::
-	mov	rdi,rcx
-	mov	rsi,rdx
-	mov	rdx,r8
-	mov	rcx,r9
-
+$L$SEH_begin_pasta_sqr::
 
 
 	push	rbp
 
+	mov	rdi,rcx
+	mov	rsi,rdx
+	mov	rdx,r8
+	mov	rcx,r9
 	push	rbx
 
 	push	r12
@@ -102,7 +100,7 @@ $L$SEH_begin_sqrx_mont_pasta::
 
 	sub	rsp,8
 
-$L$SEH_body_sqrx_mont_pasta::
+$L$SEH_body_pasta_sqr::
 
 
 	mov	rbx,rsi
@@ -132,18 +130,19 @@ $L$SEH_body_sqrx_mont_pasta::
 
 	lea	rsp,QWORD PTR[56+rsp]
 
-$L$SEH_epilogue_sqrx_mont_pasta::
+$L$SEH_epilogue_pasta_sqr::
 	mov	rdi,QWORD PTR[8+rsp]	;WIN64 epilogue
 	mov	rsi,QWORD PTR[16+rsp]
 
 	DB	0F3h,0C3h		;repret
 
-$L$SEH_end_sqrx_mont_pasta::
-sqrx_mont_pasta	ENDP
+$L$SEH_end_pasta_sqr::
+pasta_sqr	ENDP
 
 ALIGN	32
 __mulx_mont_pasta	PROC PRIVATE
 	DB	243,15,30,250
+
 	mulx	r12,r15,r15
 	mulx	r13,rbp,rbp
 	add	r11,r15
@@ -326,25 +325,24 @@ __mulx_mont_pasta	PROC PRIVATE
 
 	DB	0F3h,0C3h		;repret
 __mulx_mont_pasta	ENDP
-PUBLIC	fromx_mont_pasta
+PUBLIC	pasta_from
 
 
 ALIGN	32
-fromx_mont_pasta	PROC PUBLIC
+pasta_from	PROC PUBLIC
 	DB	243,15,30,250
 	mov	QWORD PTR[8+rsp],rdi	;WIN64 prologue
 	mov	QWORD PTR[16+rsp],rsi
 	mov	r11,rsp
-$L$SEH_begin_fromx_mont_pasta::
-	mov	rdi,rcx
-	mov	rsi,rdx
-	mov	rdx,r8
-	mov	rcx,r9
-
+$L$SEH_begin_pasta_from::
 
 
 	push	rbp
 
+	mov	rdi,rcx
+	mov	rsi,rdx
+	mov	rdx,r8
+	mov	rcx,r9
 	push	rbx
 
 	push	r12
@@ -357,7 +355,7 @@ $L$SEH_begin_fromx_mont_pasta::
 
 	sub	rsp,8
 
-$L$SEH_body_fromx_mont_pasta::
+$L$SEH_body_pasta_from::
 
 
 	mov	rbx,rdx
@@ -399,34 +397,33 @@ $L$SEH_body_fromx_mont_pasta::
 
 	lea	rsp,QWORD PTR[56+rsp]
 
-$L$SEH_epilogue_fromx_mont_pasta::
+$L$SEH_epilogue_pasta_from::
 	mov	rdi,QWORD PTR[8+rsp]	;WIN64 epilogue
 	mov	rsi,QWORD PTR[16+rsp]
 
 	DB	0F3h,0C3h		;repret
 
-$L$SEH_end_fromx_mont_pasta::
-fromx_mont_pasta	ENDP
+$L$SEH_end_pasta_from::
+pasta_from	ENDP
 
-PUBLIC	redcx_mont_pasta
+PUBLIC	pasta_redc
 
 
 ALIGN	32
-redcx_mont_pasta	PROC PUBLIC
+pasta_redc	PROC PUBLIC
 	DB	243,15,30,250
 	mov	QWORD PTR[8+rsp],rdi	;WIN64 prologue
 	mov	QWORD PTR[16+rsp],rsi
 	mov	r11,rsp
-$L$SEH_begin_redcx_mont_pasta::
-	mov	rdi,rcx
-	mov	rsi,rdx
-	mov	rdx,r8
-	mov	rcx,r9
-
+$L$SEH_begin_pasta_redc::
 
 
 	push	rbp
 
+	mov	rdi,rcx
+	mov	rsi,rdx
+	mov	rdx,r8
+	mov	rcx,r9
 	push	rbx
 
 	push	r12
@@ -439,7 +436,7 @@ $L$SEH_begin_redcx_mont_pasta::
 
 	sub	rsp,8
 
-$L$SEH_body_redcx_mont_pasta::
+$L$SEH_body_pasta_redc::
 
 
 	mov	rbx,rdx
@@ -487,18 +484,19 @@ $L$SEH_body_redcx_mont_pasta::
 
 	lea	rsp,QWORD PTR[56+rsp]
 
-$L$SEH_epilogue_redcx_mont_pasta::
+$L$SEH_epilogue_pasta_redc::
 	mov	rdi,QWORD PTR[8+rsp]	;WIN64 epilogue
 	mov	rsi,QWORD PTR[16+rsp]
 
 	DB	0F3h,0C3h		;repret
 
-$L$SEH_end_redcx_mont_pasta::
-redcx_mont_pasta	ENDP
+$L$SEH_end_pasta_redc::
+pasta_redc	ENDP
 
 ALIGN	32
 __mulx_by_1_mont_pasta	PROC PRIVATE
 	DB	243,15,30,250
+
 	mov	rax,QWORD PTR[rsi]
 	mov	r11,QWORD PTR[8+rsi]
 	mov	r12,QWORD PTR[16+rsi]
@@ -611,27 +609,26 @@ __mulx_by_1_mont_pasta	PROC PRIVATE
 	mov	r11,rdx
 	DB	0F3h,0C3h		;repret
 __mulx_by_1_mont_pasta	ENDP
-PUBLIC	sqrx_n_mul_mont_pasta
+PUBLIC	pasta_sqr_n_mul
 
 
 ALIGN	32
-sqrx_n_mul_mont_pasta	PROC PUBLIC
+pasta_sqr_n_mul	PROC PUBLIC
 	DB	243,15,30,250
 	mov	QWORD PTR[8+rsp],rdi	;WIN64 prologue
 	mov	QWORD PTR[16+rsp],rsi
 	mov	r11,rsp
-$L$SEH_begin_sqrx_n_mul_mont_pasta::
-	mov	rdi,rcx
-	mov	rsi,rdx
-	mov	rdx,r8
-	mov	rcx,r9
-	mov	r8,QWORD PTR[40+rsp]
-	mov	r9,QWORD PTR[48+rsp]
-
+$L$SEH_begin_pasta_sqr_n_mul::
 
 
 	push	rbp
 
+	mov	rdi,rcx
+	mov	rsi,rdx
+	mov	rdx,r8
+	mov	rcx,r9
+	mov	r8,QWORD PTR[48+rsp]
+	mov	r9,QWORD PTR[56+rsp]
 	push	rbx
 
 	push	r12
@@ -644,7 +641,7 @@ $L$SEH_begin_sqrx_n_mul_mont_pasta::
 
 	sub	rsp,40
 
-$L$SEH_body_sqrx_n_mul_mont_pasta::
+$L$SEH_body_pasta_sqr_n_mul::
 
 	lea	rcx,QWORD PTR[((-128))+rcx]
 	lea	r8,QWORD PTR[((-128))+r8]
@@ -1021,87 +1018,88 @@ $L$oop_sqrx_pasta::
 
 	lea	rsp,QWORD PTR[88+rsp]
 
-$L$SEH_epilogue_sqrx_n_mul_mont_pasta::
+$L$SEH_epilogue_pasta_sqr_n_mul::
 	mov	rdi,QWORD PTR[8+rsp]	;WIN64 epilogue
 	mov	rsi,QWORD PTR[16+rsp]
 
 	DB	0F3h,0C3h		;repret
 
-$L$SEH_end_sqrx_n_mul_mont_pasta::
-sqrx_n_mul_mont_pasta	ENDP
+$L$SEH_end_pasta_sqr_n_mul::
+pasta_sqr_n_mul	ENDP
 .text$	ENDS
 .pdata	SEGMENT READONLY ALIGN(4)
 ALIGN	4
-	DD	imagerel $L$SEH_begin_mulx_mont_pasta
-	DD	imagerel $L$SEH_body_mulx_mont_pasta
-	DD	imagerel $L$SEH_info_mulx_mont_pasta_prologue
+	DD	imagerel $L$SEH_begin_pasta_mul
+	DD	imagerel $L$SEH_body_pasta_mul
+	DD	imagerel $L$SEH_info_pasta_mul_prologue
 
-	DD	imagerel $L$SEH_body_mulx_mont_pasta
-	DD	imagerel $L$SEH_epilogue_mulx_mont_pasta
-	DD	imagerel $L$SEH_info_mulx_mont_pasta_body
+	DD	imagerel $L$SEH_body_pasta_mul
+	DD	imagerel $L$SEH_epilogue_pasta_mul
+	DD	imagerel $L$SEH_info_pasta_mul_body
 
-	DD	imagerel $L$SEH_epilogue_mulx_mont_pasta
-	DD	imagerel $L$SEH_end_mulx_mont_pasta
-	DD	imagerel $L$SEH_info_mulx_mont_pasta_epilogue
+	DD	imagerel $L$SEH_epilogue_pasta_mul
+	DD	imagerel $L$SEH_end_pasta_mul
+	DD	imagerel $L$SEH_info_pasta_mul_epilogue
 
-	DD	imagerel $L$SEH_begin_sqrx_mont_pasta
-	DD	imagerel $L$SEH_body_sqrx_mont_pasta
-	DD	imagerel $L$SEH_info_sqrx_mont_pasta_prologue
+	DD	imagerel $L$SEH_begin_pasta_sqr
+	DD	imagerel $L$SEH_body_pasta_sqr
+	DD	imagerel $L$SEH_info_pasta_sqr_prologue
 
-	DD	imagerel $L$SEH_body_sqrx_mont_pasta
-	DD	imagerel $L$SEH_epilogue_sqrx_mont_pasta
-	DD	imagerel $L$SEH_info_sqrx_mont_pasta_body
+	DD	imagerel $L$SEH_body_pasta_sqr
+	DD	imagerel $L$SEH_epilogue_pasta_sqr
+	DD	imagerel $L$SEH_info_pasta_sqr_body
 
-	DD	imagerel $L$SEH_epilogue_sqrx_mont_pasta
-	DD	imagerel $L$SEH_end_sqrx_mont_pasta
-	DD	imagerel $L$SEH_info_sqrx_mont_pasta_epilogue
+	DD	imagerel $L$SEH_epilogue_pasta_sqr
+	DD	imagerel $L$SEH_end_pasta_sqr
+	DD	imagerel $L$SEH_info_pasta_sqr_epilogue
 
-	DD	imagerel $L$SEH_begin_fromx_mont_pasta
-	DD	imagerel $L$SEH_body_fromx_mont_pasta
-	DD	imagerel $L$SEH_info_fromx_mont_pasta_prologue
+	DD	imagerel $L$SEH_begin_pasta_from
+	DD	imagerel $L$SEH_body_pasta_from
+	DD	imagerel $L$SEH_info_pasta_from_prologue
 
-	DD	imagerel $L$SEH_body_fromx_mont_pasta
-	DD	imagerel $L$SEH_epilogue_fromx_mont_pasta
-	DD	imagerel $L$SEH_info_fromx_mont_pasta_body
+	DD	imagerel $L$SEH_body_pasta_from
+	DD	imagerel $L$SEH_epilogue_pasta_from
+	DD	imagerel $L$SEH_info_pasta_from_body
 
-	DD	imagerel $L$SEH_epilogue_fromx_mont_pasta
-	DD	imagerel $L$SEH_end_fromx_mont_pasta
-	DD	imagerel $L$SEH_info_fromx_mont_pasta_epilogue
+	DD	imagerel $L$SEH_epilogue_pasta_from
+	DD	imagerel $L$SEH_end_pasta_from
+	DD	imagerel $L$SEH_info_pasta_from_epilogue
 
-	DD	imagerel $L$SEH_begin_redcx_mont_pasta
-	DD	imagerel $L$SEH_body_redcx_mont_pasta
-	DD	imagerel $L$SEH_info_redcx_mont_pasta_prologue
+	DD	imagerel $L$SEH_begin_pasta_redc
+	DD	imagerel $L$SEH_body_pasta_redc
+	DD	imagerel $L$SEH_info_pasta_redc_prologue
 
-	DD	imagerel $L$SEH_body_redcx_mont_pasta
-	DD	imagerel $L$SEH_epilogue_redcx_mont_pasta
-	DD	imagerel $L$SEH_info_redcx_mont_pasta_body
+	DD	imagerel $L$SEH_body_pasta_redc
+	DD	imagerel $L$SEH_epilogue_pasta_redc
+	DD	imagerel $L$SEH_info_pasta_redc_body
 
-	DD	imagerel $L$SEH_epilogue_redcx_mont_pasta
-	DD	imagerel $L$SEH_end_redcx_mont_pasta
-	DD	imagerel $L$SEH_info_redcx_mont_pasta_epilogue
+	DD	imagerel $L$SEH_epilogue_pasta_redc
+	DD	imagerel $L$SEH_end_pasta_redc
+	DD	imagerel $L$SEH_info_pasta_redc_epilogue
 
-	DD	imagerel $L$SEH_begin_sqrx_n_mul_mont_pasta
-	DD	imagerel $L$SEH_body_sqrx_n_mul_mont_pasta
-	DD	imagerel $L$SEH_info_sqrx_n_mul_mont_pasta_prologue
+	DD	imagerel $L$SEH_begin_pasta_sqr_n_mul
+	DD	imagerel $L$SEH_body_pasta_sqr_n_mul
+	DD	imagerel $L$SEH_info_pasta_sqr_n_mul_prologue
 
-	DD	imagerel $L$SEH_body_sqrx_n_mul_mont_pasta
-	DD	imagerel $L$SEH_epilogue_sqrx_n_mul_mont_pasta
-	DD	imagerel $L$SEH_info_sqrx_n_mul_mont_pasta_body
+	DD	imagerel $L$SEH_body_pasta_sqr_n_mul
+	DD	imagerel $L$SEH_epilogue_pasta_sqr_n_mul
+	DD	imagerel $L$SEH_info_pasta_sqr_n_mul_body
 
-	DD	imagerel $L$SEH_epilogue_sqrx_n_mul_mont_pasta
-	DD	imagerel $L$SEH_end_sqrx_n_mul_mont_pasta
-	DD	imagerel $L$SEH_info_sqrx_n_mul_mont_pasta_epilogue
+	DD	imagerel $L$SEH_epilogue_pasta_sqr_n_mul
+	DD	imagerel $L$SEH_end_pasta_sqr_n_mul
+	DD	imagerel $L$SEH_info_pasta_sqr_n_mul_epilogue
 
 .pdata	ENDS
 .xdata	SEGMENT READONLY ALIGN(8)
 ALIGN	8
-$L$SEH_info_mulx_mont_pasta_prologue::
+$L$SEH_info_pasta_mul_prologue::
 DB	1,0,5,00bh
 DB	0,074h,1,0
 DB	0,064h,2,0
-DB	0,003h
+DB	0,0b3h
 DB	0,0
-$L$SEH_info_mulx_mont_pasta_body::
+	DD	0,0
+$L$SEH_info_pasta_mul_body::
 DB	1,0,17,0
 DB	000h,0f4h,001h,000h
 DB	000h,0e4h,002h,000h
@@ -1112,20 +1110,22 @@ DB	000h,054h,006h,000h
 DB	000h,074h,008h,000h
 DB	000h,064h,009h,000h
 DB	000h,062h
-DB	000h,000h
-$L$SEH_info_mulx_mont_pasta_epilogue::
+DB	000h,000h,000h,000h,000h,000h
+DB	000h,000h,000h,000h
+$L$SEH_info_pasta_mul_epilogue::
 DB	1,0,4,0
 DB	000h,074h,001h,000h
 DB	000h,064h,002h,000h
 DB	000h,000h,000h,000h
 
-$L$SEH_info_sqrx_mont_pasta_prologue::
+$L$SEH_info_pasta_sqr_prologue::
 DB	1,0,5,00bh
 DB	0,074h,1,0
 DB	0,064h,2,0
-DB	0,003h
+DB	0,0b3h
 DB	0,0
-$L$SEH_info_sqrx_mont_pasta_body::
+	DD	0,0
+$L$SEH_info_pasta_sqr_body::
 DB	1,0,17,0
 DB	000h,0f4h,001h,000h
 DB	000h,0e4h,002h,000h
@@ -1136,20 +1136,22 @@ DB	000h,054h,006h,000h
 DB	000h,074h,008h,000h
 DB	000h,064h,009h,000h
 DB	000h,062h
-DB	000h,000h
-$L$SEH_info_sqrx_mont_pasta_epilogue::
+DB	000h,000h,000h,000h,000h,000h
+DB	000h,000h,000h,000h
+$L$SEH_info_pasta_sqr_epilogue::
 DB	1,0,4,0
 DB	000h,074h,001h,000h
 DB	000h,064h,002h,000h
 DB	000h,000h,000h,000h
 
-$L$SEH_info_fromx_mont_pasta_prologue::
+$L$SEH_info_pasta_from_prologue::
 DB	1,0,5,00bh
 DB	0,074h,1,0
 DB	0,064h,2,0
-DB	0,003h
+DB	0,0b3h
 DB	0,0
-$L$SEH_info_fromx_mont_pasta_body::
+	DD	0,0
+$L$SEH_info_pasta_from_body::
 DB	1,0,17,0
 DB	000h,0f4h,001h,000h
 DB	000h,0e4h,002h,000h
@@ -1160,20 +1162,22 @@ DB	000h,054h,006h,000h
 DB	000h,074h,008h,000h
 DB	000h,064h,009h,000h
 DB	000h,062h
-DB	000h,000h
-$L$SEH_info_fromx_mont_pasta_epilogue::
+DB	000h,000h,000h,000h,000h,000h
+DB	000h,000h,000h,000h
+$L$SEH_info_pasta_from_epilogue::
 DB	1,0,4,0
 DB	000h,074h,001h,000h
 DB	000h,064h,002h,000h
 DB	000h,000h,000h,000h
 
-$L$SEH_info_redcx_mont_pasta_prologue::
+$L$SEH_info_pasta_redc_prologue::
 DB	1,0,5,00bh
 DB	0,074h,1,0
 DB	0,064h,2,0
-DB	0,003h
+DB	0,0b3h
 DB	0,0
-$L$SEH_info_redcx_mont_pasta_body::
+	DD	0,0
+$L$SEH_info_pasta_redc_body::
 DB	1,0,17,0
 DB	000h,0f4h,001h,000h
 DB	000h,0e4h,002h,000h
@@ -1184,20 +1188,22 @@ DB	000h,054h,006h,000h
 DB	000h,074h,008h,000h
 DB	000h,064h,009h,000h
 DB	000h,062h
-DB	000h,000h
-$L$SEH_info_redcx_mont_pasta_epilogue::
+DB	000h,000h,000h,000h,000h,000h
+DB	000h,000h,000h,000h
+$L$SEH_info_pasta_redc_epilogue::
 DB	1,0,4,0
 DB	000h,074h,001h,000h
 DB	000h,064h,002h,000h
 DB	000h,000h,000h,000h
 
-$L$SEH_info_sqrx_n_mul_mont_pasta_prologue::
+$L$SEH_info_pasta_sqr_n_mul_prologue::
 DB	1,0,5,00bh
 DB	0,074h,1,0
 DB	0,064h,2,0
-DB	0,003h
+DB	0,0b3h
 DB	0,0
-$L$SEH_info_sqrx_n_mul_mont_pasta_body::
+	DD	0,0
+$L$SEH_info_pasta_sqr_n_mul_body::
 DB	1,0,17,0
 DB	000h,0f4h,005h,000h
 DB	000h,0e4h,006h,000h
@@ -1208,8 +1214,9 @@ DB	000h,054h,00ah,000h
 DB	000h,074h,00ch,000h
 DB	000h,064h,00dh,000h
 DB	000h,0a2h
-DB	000h,000h
-$L$SEH_info_sqrx_n_mul_mont_pasta_epilogue::
+DB	000h,000h,000h,000h,000h,000h
+DB	000h,000h,000h,000h
+$L$SEH_info_pasta_sqr_n_mul_epilogue::
 DB	1,0,4,0
 DB	000h,074h,001h,000h
 DB	000h,064h,002h,000h
